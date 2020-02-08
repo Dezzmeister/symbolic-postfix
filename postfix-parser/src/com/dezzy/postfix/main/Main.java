@@ -5,12 +5,31 @@ import java.util.Map;
 
 import com.dezzy.postfix.math.Parser;
 import com.dezzy.postfix.math.symbolic.SymbolicParser;
+import com.dezzy.postfix.math.symbolic.structure.Expression;
 
 public class Main {
 
 	public static void main(String[] args) {
 		//valueTest();
-		symbolTest();
+		//symbolTest();
+		sphereTest();
+	}
+	
+	private static final void sphereTest() {
+		final String[] tokens = "4 3 / pi * r 3 ^ *".split(" ");
+		
+		final SymbolicParser parser = new SymbolicParser(tokens);
+		
+		final Expression expression = parser.createSymbolicStructure();
+		System.out.println("Formula for the volume of a sphere: " + expression);
+		
+		final Expression simplified = expression.simplify(Parser.getCompleteConstantsMap(new HashMap<String, Double>()));
+		System.out.println("Simplified formula for the volume of a sphere: " + simplified);
+		
+		final Map<String, Double> radius = new HashMap<String, Double>();
+		radius.put("r", 2.0);
+		
+		System.out.println("Volume of a sphere with radius 2: " + simplified.evaluate(radius));
 	}
 	
 	private static final void symbolTest() {
@@ -18,7 +37,9 @@ public class Main {
 		final String[] testTokens0 = testString0.split(" ");
 		
 		final SymbolicParser parser = new SymbolicParser(testTokens0);
-		System.out.println(parser.createSymbolicStructure().toString());
+		final Expression expression = parser.createSymbolicStructure();
+		System.out.println(expression.toString());
+		System.out.println(expression.simplify(Parser.getCompleteConstantsMap(new HashMap<String, Double>())).toString());
 		System.out.println(parser.eval());
 	}
 	

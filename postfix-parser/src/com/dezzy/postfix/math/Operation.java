@@ -17,10 +17,33 @@ public interface Operation {
 	 */
 	public double operate(final double d0, final double d1);
 	
+	/**
+	 * d0 + d1
+	 */
 	public static final Operation add = (d0, d1) -> d0 + d1;
+	
+	/**
+	 * d0 - d1
+	 */
 	public static final Operation subtract = (d0, d1) -> d0 - d1;
+	
+	/**
+	 * d0 * d1
+	 */
 	public static final Operation multiply = (d0, d1) -> d0 * d1;
+	
+	/**
+	 * d0 / d1
+	 */
 	public static final Operation divide = (d0, d1) -> d0 / d1;
+	
+	/**
+	 * {@link Math#pow(double, double) Math.pow(d0, d1)}
+	 */
 	public static final Operation power = Math::pow;
+	
+	/**
+	 * d0 % d1
+	 */
 	public static final Operation modulo = (d0, d1) -> d0 % d1;
 }
