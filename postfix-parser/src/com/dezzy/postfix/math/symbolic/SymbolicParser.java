@@ -3,22 +3,28 @@ package com.dezzy.postfix.math.symbolic;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import com.dezzy.postfix.math.Function;
 import com.dezzy.postfix.math.Operation;
-import com.dezzy.postfix.math.Parser;
 import com.dezzy.postfix.math.Reserved;
 import com.dezzy.postfix.math.StackLengthException;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
+import com.dezzy.postfix.math.symbolic.structure.SymbolicFunction;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
 import com.dezzy.postfix.math.symbolic.structure.Unknown;
 import com.dezzy.postfix.math.symbolic.structure.Value;
 
 /**
- * Extends {@link Parser Parser's} functionality by adding functions to perform symbolic operations on
- * a postfix expression.
+ * Parses a Postfix expression by using an expression stack to construct a symbolic representation of
+ * the expression.
  * 
  * @author Joe Desmond
  */
-public class SymbolicParser extends Parser {
+public class SymbolicParser {
+	
+	/**
+	 * Postfix tokens
+	 */
+	private final String[] tokens;
 	
 	/**
 	 * Creates a symbolic parser from the given tokens.
@@ -26,7 +32,7 @@ public class SymbolicParser extends Parser {
 	 * @param _tokens postfix tokens
 	 */
 	public SymbolicParser(final String[] _tokens) {
-		super(_tokens);
+		tokens = _tokens;
 	}
 	
 	/**
@@ -42,9 +48,20 @@ public class SymbolicParser extends Parser {
 			final String token = tokens[i];
 			
 			final Operation potentialOperation = Reserved.operations.get(token);
+			final Function potentialFunction = Reserved.functions.get(token);
 			
-			if (potentialOperation == null) {
-				expressionStack.push(symbolize(token));
+			if (potentialOperation == null ) {
+				if (potentialFunction == null) {
+					expressionStack.push(symbolize(token));
+				} else {
+					if (expressionStack.size() >= 1) {
+						final Expression argument = expressionStack.pop();
+						
+						expressionStack.push(new SymbolicFunction(argument, potentialFunction));
+					} else {
+						throw new StackLengthException("Not enough operands on the expression stack! Index: " + i);
+					}
+				}				
 			} else {
 				if (expressionStack.size() >= 2) {
 					final Expression operand2 = expressionStack.pop();

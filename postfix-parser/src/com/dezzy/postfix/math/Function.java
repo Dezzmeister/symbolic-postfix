@@ -14,7 +14,7 @@ public interface Function {
 	 * @param x input
 	 * @return output 
 	 */
-	public double accept(final double x);
+	public double apply(final double x);
 	
 	public static final Function sin = Math::sin;
 	

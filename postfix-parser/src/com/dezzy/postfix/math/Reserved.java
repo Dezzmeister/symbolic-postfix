@@ -6,6 +6,11 @@ import java.util.Map;
 
 import com.dezzy.postfix.auxiliary.BiMap;
 
+/**
+ * Reserved/predetermined operators, functions, and constants.
+ * 
+ * @author Joe Desmond
+ */
 public final class Reserved {
 	
 	/**
@@ -103,5 +108,21 @@ public final class Reserved {
 		} else {
 			return token;
 		}
+	}
+	
+	/**
+	 * Returns a complete list of constants, including mathematical constants (in {@link #constants}) as well as those defined in
+	 * <code>additionalConstants</code>.
+	 * 
+	 * @param additionalConstants maps variable names to values: for example, a mapping like '<code>r -> 2.0</code>'
+	 * 		may exist, if a formula for the volume of a sphere needs to be evaluated
+	 * @return a complete constants map
+	 */
+	public static final Map<String, Double> getCompleteConstantsMap(final Map<String, Double> additionalConstants) {
+		final Map<String, Double> allConstants = new HashMap<String, Double>();
+		allConstants.putAll(Reserved.constants);
+		allConstants.putAll(additionalConstants);
+		
+		return allConstants;
 	}
 }
