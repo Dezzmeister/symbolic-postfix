@@ -5,6 +5,7 @@ import java.util.Deque;
 
 import com.dezzy.postfix.math.Operation;
 import com.dezzy.postfix.math.Parser;
+import com.dezzy.postfix.math.Reserved;
 import com.dezzy.postfix.math.StackLengthException;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
@@ -40,7 +41,7 @@ public class SymbolicParser extends Parser {
 		for (int i = 0; i < tokens.length; i++) {
 			final String token = tokens[i];
 			
-			final Operation potentialOperation = operations.get(token);
+			final Operation potentialOperation = Reserved.operations.get(token);
 			
 			if (potentialOperation == null) {
 				expressionStack.push(symbolize(token));

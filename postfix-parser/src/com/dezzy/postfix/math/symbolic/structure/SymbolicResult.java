@@ -3,7 +3,7 @@ package com.dezzy.postfix.math.symbolic.structure;
 import java.util.Map;
 
 import com.dezzy.postfix.math.Operation;
-import com.dezzy.postfix.math.Parser;
+import com.dezzy.postfix.math.Reserved;
 
 /**
  * A single, symbolic operation between two symbolic expressions.
@@ -102,6 +102,6 @@ public class SymbolicResult implements Expression {
 	 */
 	@Override
 	public final String toString() {
-		return "(" + operand1.toString() + " " + Parser.operationTokenLookup(operation) + " " + operand2.toString() + ")";
+		return "(" + operand1.toString() + " " + Reserved.operationTokenLookup(operation) + " " + operand2.toString() + ")";
 	}
 }

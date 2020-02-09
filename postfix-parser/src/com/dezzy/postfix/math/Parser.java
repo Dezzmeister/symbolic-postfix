@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 /**
  * A postfix parser.
@@ -12,93 +11,7 @@ import java.util.Map.Entry;
  * @author Joe Desmond
  */
 public class Parser {
-	
-	/**
-	 * Maps String operator tokens to operation functions
-	 */
-	protected static final Map<String, Operation> operations;
-	
-	/**
-	 * Maps operation functions to String operator tokens
-	 */
-	protected static final Map<Operation, String> reverseOperations;
-	
-	/**
-	 * Math constants
-	 */
-	private static final Map<String, Double> constants;
-	
-	static {
-		operations = getOperations();
-		reverseOperations = getReverseOperations(operations);
-		constants = getConstants();
-	}
-	
-	/**
-	 * Returns a mapping of symbolic names to known mathematical constants. <br>
-	 * Example: <code>"pi"</code> maps to {@link Math#PI}.
-	 * 
-	 * @return mathematical constants
-	 */
-	private static final HashMap<String, Double> getConstants() {
-		final HashMap<String, Double> out = new HashMap<String, Double>();
 		
-		out.put("e", Math.E);
-		out.put("pi", Math.PI);
-		
-		return out;
-	}
-	
-	/**
-	 * Returns a mapping of string operators to mathematical operations.
-	 * 
-	 * @return operations
-	 */
-	private static final HashMap<String, Operation> getOperations() {
-		final HashMap<String, Operation> out = new HashMap<String, Operation>();
-		
-		out.put("+", Operation.add);
-		out.put("-", Operation.subtract);
-		out.put("*", Operation.multiply);
-		out.put("/", Operation.divide);
-		out.put("^", Operation.power);
-		out.put("%", Operation.modulo);
-		
-		return out;
-	}
-	
-	/**
-	 * Returns a mapping of mathematical operations to String operators.
-	 * 
-	 * @param operations (operator identifier -> operation)
-	 * @return (operation -> operator identifier)
-	 */
-	private static final HashMap<Operation, String> getReverseOperations(final Map<String, Operation> operations) {
-		final HashMap<Operation, String> out = new HashMap<Operation, String>();
-		
-		for (Entry<String, Operation> entry : operations.entrySet()) {
-			out.put(entry.getValue(), entry.getKey());
-		}
-		
-		return out;
-	}
-	
-	/**
-	 * Finds an operator identifier given the mathematical operation that it represents.
-	 * 
-	 * @param operation mathematical operation
-	 * @return operator identifier
-	 */
-	public static final String operationTokenLookup(final Operation operation) {
-		final String token = reverseOperations.get(operation);
-		
-		if (token == null) {
-			throw new UnrecognizedSymbolException("No token exists for the specified operation!");
-		} else {
-			return token;
-		}
-	}
-	
 	/**
 	 * Returns a complete list of constants, including mathematical constants (in {@link #constants}) as well as those defined in
 	 * <code>additionalConstants</code>.
@@ -109,7 +22,7 @@ public class Parser {
 	 */
 	public static final Map<String, Double> getCompleteConstantsMap(final Map<String, Double> additionalConstants) {
 		final Map<String, Double> allConstants = new HashMap<String, Double>();
-		allConstants.putAll(constants);
+		allConstants.putAll(Reserved.constants);
 		allConstants.putAll(additionalConstants);
 		
 		return allConstants;
@@ -159,7 +72,7 @@ public class Parser {
 		
 		for (int i = 0; i < tokens.length; i++) {
 			final String token = tokens[i];
-			final Operation potentialOperation = operations.get(token);
+			final Operation potentialOperation = Reserved.operations.get(token);
 			
 			if (potentialOperation == null) {
 				final Double potentialConstant = constants.get(token);
@@ -197,6 +110,6 @@ public class Parser {
 	 * @return double value of the provided expression
 	 */
 	public final double eval() {
-		return evalWithConstants(constants);
+		return evalWithConstants(Reserved.constants);
 	}
 }
