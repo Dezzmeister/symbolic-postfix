@@ -89,7 +89,7 @@ public final class SymbolicFunction implements Expression {
 	}
 	
 	public Expression derivative(final String varName) {
-		return null;
+		return function.derivative(argument, varName);
 	}
 	
 	/**

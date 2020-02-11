@@ -1,11 +1,15 @@
 package com.dezzy.postfix.math;
 
+import com.dezzy.postfix.math.symbolic.structure.Expression;
+import com.dezzy.postfix.math.symbolic.structure.SymbolicFunction;
+import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
+import com.dezzy.postfix.math.symbolic.structure.Value;
+
 /**
  * A mathematical function that accepts 1 argument.
  * 
  * @author Joe Desmond
  */
-@FunctionalInterface
 public interface Function {
 	
 	/**
@@ -17,64 +21,287 @@ public interface Function {
 	public double apply(final double x);
 	
 	/**
+	 * Symbolically finds the derivative of this function when applied to an
+	 * argument, with respect to the given variable.
+	 * 
+	 * @param arg argument to the function
+	 * @param varName variable name (differentiating with respect to)
+	 * @return derivative expression
+	 */
+	public Expression derivative(final Expression arg, final String varName);
+	
+	/**
 	 * @see Math#sin(double)
 	 */
-	public static final Function sin = Math::sin;
+	public static final Function sin = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.sin(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression term = new SymbolicFunction(arg, Function.cos);
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#cos(double)
 	 */
-	public static final Function cos = Math::cos;
+	public static final Function cos = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.cos(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression term = new SymbolicFunction(arg, Function.sin);
+				final Expression negative = new SymbolicResult(Value.NEG_ONE, term, Operation.multiply);
+				return new SymbolicResult(arg.derivative(varName), negative, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#tan(double)
 	 */
-	public static final Function tan = Math::tan;
+	public static final Function tan = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.tan(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression exponent = new SymbolicResult(arg, new Value(2), Operation.power);
+				final Expression inverse = new SymbolicResult(Value.ONE, exponent, Operation.divide);
+				return new SymbolicResult(arg.derivative(varName), inverse, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#asin(double)
 	 */
-	public static final Function invsin = Math::asin;
+	public static final Function invsin = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.asin(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression argSqr = new SymbolicResult(arg, new Value(2), Operation.power);
+				final Expression oneMinusArgSqr = new SymbolicResult(Value.ONE, argSqr, Operation.subtract);
+				final Expression sqrt = new SymbolicResult(oneMinusArgSqr, new Value(-0.5), Operation.power);
+				
+				return new SymbolicResult(arg.derivative(varName), sqrt, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#acos(double)
 	 */
-	public static final Function invcos = Math::acos;
+	public static final Function invcos = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.acos(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression argSqr = new SymbolicResult(arg, new Value(2), Operation.power);
+				final Expression oneMinusArgSqr = new SymbolicResult(Value.ONE, argSqr, Operation.subtract);
+				final Expression sqrt = new SymbolicResult(oneMinusArgSqr, new Value(-0.5), Operation.power);
+				final Expression term = new SymbolicResult(Value.NEG_ONE, sqrt, Operation.multiply);
+				
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#atan(double)
 	 */
-	public static final Function invtan = Math::atan;
+	public static final Function invtan = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.asin(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression argSqr = new SymbolicResult(arg, new Value(2), Operation.power);
+				final Expression onePlusArgSqr = new SymbolicResult(Value.ONE, argSqr, Operation.add);
+				final Expression inverse = new SymbolicResult(Value.ONE, onePlusArgSqr, Operation.divide);
+				
+				return new SymbolicResult(arg.derivative(varName), inverse, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#sinh(double)
 	 */
-	public static final Function sinh = Math::sinh;
+	public static final Function sinh = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.sinh(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression term = new SymbolicFunction(arg, Function.cosh);
+				
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#cosh(double)
 	 */
-	public static final Function cosh = Math::cosh;
+	public static final Function cosh = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.cosh(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression term = new SymbolicFunction(arg, Function.sinh);
+				
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#tanh(double)
 	 */
-	public static final Function tanh = Math::tanh;
+	public static final Function tanh = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.tanh(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression tanh = new SymbolicFunction(arg, Function.tanh);
+				final Expression sqr = new SymbolicResult(tanh, new Value(2), Operation.power);
+				final Expression term = new SymbolicResult(Value.ONE, sqr, Operation.subtract);
+				
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#log(double)
 	 */
-	public static final Function ln = Math::log;
+	public static final Function ln = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.log(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression term = new SymbolicResult(Value.ONE, arg, Operation.divide);
+				
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#log10(double)
 	 */
-	public static final Function log10 = Math::log10;
+	public static final Function log10 = new Function() {
+		private final Expression lnExpr = new SymbolicFunction(new Value(10), Function.ln);
+		
+		@Override
+		public double apply(final double x) {
+			return Math.log10(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression denom = new SymbolicResult(arg, lnExpr, Operation.multiply);
+				final Expression term = new SymbolicResult(Value.ONE, denom, Operation.divide);
+				
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};
 	
 	/**
 	 * @see Math#abs(double)
 	 */
-	public static final Function abs = Math::abs;
-	
-	
+	public static final Function abs = new Function() {
+		
+		@Override
+		public double apply(final double x) {
+			return Math.abs(x);
+		}
+		
+		@Override
+		public Expression derivative(final Expression arg, final String varName) {
+			if (arg.isFunctionOf(varName)) {
+				final Expression abs = new SymbolicFunction(arg, Function.abs);
+				final Expression term = new SymbolicResult(abs, arg, Operation.divide);
+				
+				return new SymbolicResult(arg.derivative(varName), term, Operation.multiply);
+			} else {
+				return Value.ZERO;
+			}
+		}
+	};	
 }

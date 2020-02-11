@@ -24,6 +24,15 @@ public interface Operation {
 	 */
 	public double operate(final double d0, final double d1);
 	
+	/**
+	 * Symbolically finds the derivative of two expressions bound by this operation,
+	 * with respect to the given variable.
+	 * 
+	 * @param op1 first operand
+	 * @param op2 second operand
+	 * @param varName variable name
+	 * @return the derivative function
+	 */
 	public Expression derivative(final Expression op1, final Expression op2, final String varName);
 	
 	/**
@@ -67,7 +76,7 @@ public interface Operation {
 			} else if (op1.isFunctionOf(varName)) {
 				return op1.derivative(varName);
 			} else if (op2.isFunctionOf(varName)) {
-				return new SymbolicResult(Value.ZERO, op2.derivative(varName), Operation.subtract);
+				return new SymbolicResult(Value.NEG_ONE, op2.derivative(varName), Operation.multiply);
 			} else {
 				return Value.ZERO;
 			}
@@ -154,16 +163,21 @@ public interface Operation {
 		@Override
 		public Expression derivative(final Expression op1, final Expression op2, final String varName) {
 			if (op1.isFunctionOf(varName) && op2.isFunctionOf(varName)) {
-				//UNFINISHED
+				//Implements a generalized power rule
 				
 				final Expression fprime = op1.derivative(varName);
+				final Expression gMinusOne = new SymbolicResult(op2, Value.ONE, Operation.subtract);
+				final Expression fgMinusOne = new SymbolicResult(op1, gMinusOne, Operation.power);
+				final Expression gfgMinusOne = new SymbolicResult(op2, fgMinusOne, Operation.multiply);
+				final Expression firstTerm = new SymbolicResult(fprime, gfgMinusOne, Operation.multiply);
+				
 				final Expression gprime = op2.derivative(varName);
-				final Expression fprimeg = new SymbolicResult(fprime, op2, Operation.multiply);
-				final Expression fgprime = new SymbolicResult(op1, gprime, Operation.multiply);
+				final Expression lnf = new SymbolicFunction(op1, Function.ln);
+				final Expression fg = new SymbolicResult(op1, op2, Operation.power);
+				final Expression fglnf = new SymbolicResult(fg, lnf, Operation.multiply);
+				final Expression secondTerm = new SymbolicResult(fglnf, gprime, Operation.multiply);
 
-				final Expression numerator = new SymbolicResult(fprimeg, fgprime, Operation.subtract);
-				final Expression denominator = new SymbolicResult(op2, new Value(2), Operation.power);
-				return new SymbolicResult(numerator, denominator, Operation.divide);
+				return new SymbolicResult(firstTerm, secondTerm, Operation.add);
 			} else if (op1.isFunctionOf(varName)) {
 				//Implements the power rule
 				
@@ -178,8 +192,10 @@ public interface Operation {
 				
 				final Expression newExponent = new SymbolicResult(op2, Value.ONE, Operation.subtract);
 				final Expression powerTerm = new SymbolicResult(op1, newExponent, Operation.power);
+				final Expression term = new SymbolicResult(op2, powerTerm, Operation.multiply);
 				
-				return new SymbolicResult(op2, powerTerm, Operation.multiply);
+				//Chain rule
+				return new SymbolicResult(op1.derivative(varName), term, Operation.multiply);
 			} else if (op2.isFunctionOf(varName)) {
 				//Exponential rule (with the chain rule)
 				

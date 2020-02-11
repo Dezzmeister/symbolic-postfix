@@ -7,6 +7,7 @@ import com.dezzy.postfix.math.Reserved;
 import com.dezzy.postfix.math.symbolic.SymbolicParser;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 
+@SuppressWarnings("unused")
 public class Main {
 
 	public static void main(String[] args) {
@@ -17,12 +18,13 @@ public class Main {
 	}
 	
 	private static final void derivativeTest() {
-		final String[] tokens = "2 x 2 ^ x 3 ^ 2 * + ^".split(" ");
+		final String[] tokens = "x sin".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expression = parser.createSymbolicStructure();
 		final Expression derivative = expression.derivative("x");
-		System.out.println(expression.simplify(new HashMap<String, Double>()));
-		System.out.println(derivative.simplify(new HashMap<String, Double>()));
+		System.out.println(expression.simplify(Reserved.constants));
+		System.out.println(derivative);
+		System.out.println(derivative.simplify(Reserved.constants));
 	}
 	
 	private static final void sphereTest() {
