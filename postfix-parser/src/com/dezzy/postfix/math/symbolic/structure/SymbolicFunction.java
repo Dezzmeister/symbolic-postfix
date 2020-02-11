@@ -1,6 +1,7 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
 import java.util.Map;
+import java.util.Objects;
 
 import com.dezzy.postfix.math.Function;
 import com.dezzy.postfix.math.Reserved;
@@ -77,6 +78,21 @@ public final class SymbolicFunction implements Expression {
 	}
 	
 	/**
+	 * Returns true if the argument is a function of the given variable.
+	 * 
+	 * @param varName variable name
+	 * @return true if the argument is a function of the given variable
+	 */
+	@Override
+	public boolean isFunctionOf(final String varName) {
+		return argument.isFunctionOf(varName);
+	}
+	
+	public Expression derivative(final String varName) {
+		return null;
+	}
+	
+	/**
 	 * Returns a string of the format: <code>func(arg)</code><br>
 	 * sin(x): <code>sin(x)</code><br>
 	 * abs(x ^ 2): <code>abs((x ^ 2))</code><br>
@@ -87,5 +103,31 @@ public final class SymbolicFunction implements Expression {
 	@Override
 	public final String toString() {
 		return Reserved.functions.inverseGet(function) + "(" + argument.toString() + ")";
+	}
+	
+	/**
+	 * Returns true if these two SymbolicFunctions are the same function, applied to the same argument.
+	 * 
+	 * @param other other SymbolicFunction
+	 * @return true if these SymbolicFunctions are obviously equal
+	 */
+	@Override
+	public boolean equals(final Object other) {
+		if (!(other instanceof SymbolicFunction)) {
+			return false;
+		} else {
+			final SymbolicFunction otherFunc = (SymbolicFunction) other;
+			return (argument.equals(otherFunc.argument) && function.equals(otherFunc.function));
+		}
+	}
+	
+	/**
+	 * Returns the hashcode of this SymbolicFunction by hashing its argument and function.
+	 * 
+	 * @return hashcode of this SymbolicFunction
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(argument, function);
 	}
 }

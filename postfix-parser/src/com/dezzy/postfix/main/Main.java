@@ -12,7 +12,17 @@ public class Main {
 	public static void main(String[] args) {
 		//valueTest();
 		//symbolTest();
-		sphereTest();
+		//sphereTest();
+		derivativeTest();
+	}
+	
+	private static final void derivativeTest() {
+		final String[] tokens = "2 x 2 ^ x 3 ^ 2 * + ^".split(" ");
+		final SymbolicParser parser = new SymbolicParser(tokens);
+		final Expression expression = parser.createSymbolicStructure();
+		final Expression derivative = expression.derivative("x");
+		System.out.println(expression.simplify(new HashMap<String, Double>()));
+		System.out.println(derivative.simplify(new HashMap<String, Double>()));
 	}
 	
 	private static final void sphereTest() {
@@ -22,10 +32,20 @@ public class Main {
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		
 		final Expression expression = parser.createSymbolicStructure();
+		final Expression derivative1 = expression.derivative("r");
 		System.out.println("Formula for the volume of a sphere: " + expression);
+		System.out.println("Derivative of the volume formula: " + derivative1);
+		
+		System.out.println("Function of r: " + expression.isFunctionOf("r"));
+		System.out.println("Function of x: " + expression.isFunctionOf("x"));
+		System.out.println("Function of pi: " + expression.isFunctionOf("pi"));
+		System.out.println();
 		
 		final Expression simplified = expression.simplify(Reserved.getCompleteConstantsMap(new HashMap<String, Double>()));
+		final Expression derivative = simplified.derivative("r");
 		System.out.println("Simplified formula for the volume of a sphere: " + simplified);
+		System.out.println("Derivative of the simplified volume formula: " + derivative);
+		System.out.println("Function of r: " + simplified.isFunctionOf("r"));
 		
 		final Map<String, Double> radius = new HashMap<String, Double>();
 		radius.put("r", 2.0);

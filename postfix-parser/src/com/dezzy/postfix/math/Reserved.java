@@ -47,7 +47,7 @@ public final class Reserved {
 		out.put("*", Operation.multiply);
 		out.put("/", Operation.divide);
 		out.put("^", Operation.power);
-		out.put("%", Operation.modulo);
+		//out.put("%", Operation.modulo);
 		
 		return out;
 	}

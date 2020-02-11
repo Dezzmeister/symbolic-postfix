@@ -1,6 +1,7 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A mathematical unknown; typically a variable (<code>x,y,a,</code>etc.) or a known constant like <code>pi</code>
@@ -70,6 +71,34 @@ public class Unknown implements Expression {
 	}
 	
 	/**
+	 * Returns true if this Unknown is the specified variable.
+	 * 
+	 * @param varName variable name
+	 * @return true if this Unknown is the specified variable
+	 */
+	@Override
+	public boolean isFunctionOf(final String varName) {
+		return varName.equals(this.varName);
+	}
+	
+	/**
+	 * Returns the derivative of this Unknown with respect to <code>varName</code>,
+	 * which is either one or zero. If this Unknown is the specified variable,
+	 * the derivative is one, otherwise the derivative is zero.
+	 * 
+	 * @param varName variable name
+	 * @return zero or one (as a {@link Value})
+	 */
+	@Override
+	public Expression derivative(final String varName) {
+		if (varName.equals(this.varName)) {
+			return Value.ONE;
+		} else {
+			return Value.ZERO;
+		}
+	}
+	
+	/**
 	 * Returns the symbolic name of this unknown. Does not know or care about the value.
 	 * 
 	 * @return the symbolic name of this unknown
@@ -77,5 +106,31 @@ public class Unknown implements Expression {
 	@Override
 	public final String toString() {
 		return varName;
+	}
+	
+	/**
+	 * Returns true if these two Unknowns are the same variable.
+	 * 
+	 * @param other other Unknown
+	 * @return true if these Unknowns are obviously equal
+	 */
+	@Override
+	public boolean equals(final Object other) {
+		if (!(other instanceof Unknown)) {
+			return false;
+		} else {
+			final Unknown otherUnknown = (Unknown) other;
+			return varName.equals(otherUnknown.varName);
+		}
+	}
+	
+	/**
+	 * Returns the hashcode of this Unknown by hashing its variable name.
+	 * 
+	 * @return hashcode of this Unknown
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(varName);
 	}
 }

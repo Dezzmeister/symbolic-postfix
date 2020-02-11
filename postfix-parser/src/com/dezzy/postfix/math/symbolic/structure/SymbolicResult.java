@@ -1,6 +1,7 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
 import java.util.Map;
+import java.util.Objects;
 
 import com.dezzy.postfix.math.Operation;
 import com.dezzy.postfix.math.Reserved;
@@ -90,6 +91,22 @@ public class SymbolicResult implements Expression {
 	}
 	
 	/**
+	 * Returns true if one of the operands is a function of the given variable.
+	 * 
+	 * @param varName variable name
+	 * @return true if one of the operands is a function of the given variable
+	 */
+	@Override
+	public boolean isFunctionOf(final String varName) {
+		return operand1.isFunctionOf(varName) || operand2.isFunctionOf(varName);
+	}
+	
+	@Override
+	public Expression derivative(final String varName) {
+		return operation.derivative(operand1, operand2, varName);
+	}
+	
+	/**
 	 * Returns a String representing this calculation, of the format:
 	 * <p> 
 	 * <code>(expr1 operator expr2)</code>
@@ -103,5 +120,33 @@ public class SymbolicResult implements Expression {
 	@Override
 	public final String toString() {
 		return "(" + operand1.toString() + " " + Reserved.operationTokenLookup(operation) + " " + operand2.toString() + ")";
+	}
+	
+	/**
+	 * Returns true if these two SymbolicResults represent the same operation with the same operands.
+	 * 
+	 * @param other other SymbolicResult
+	 * @return true if these SymbolicResults are obviously equal
+	 */
+	@Override
+	public boolean equals(final Object other) {
+		if (!(other instanceof SymbolicResult)) {
+			return false;
+		} else {
+			final SymbolicResult otherSymbolic = (SymbolicResult) other;
+			return (operand1.equals(otherSymbolic.operand1) && 
+					operand2.equals(otherSymbolic.operand2) &&
+					operation.equals(otherSymbolic.operation));
+		}
+	}
+	
+	/**
+	 * Returns the hashcode of this SymbolicResult by hashing its operands and operation.
+	 * 
+	 * @return hashcode of this SymbolicResult
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hash(operand1, operand2, operation);
 	}
 }
