@@ -80,7 +80,7 @@ public class SymbolicResult implements Expression {
 	public Expression simplify(final Map<String, Double> constants) {
 		final Expression expr0 = operand1.simplify(constants);
 		final Expression expr1 = operand2.simplify(constants);
-		final SymbolicResult result = new SymbolicResult(expr0, expr1, operation);
+		final Expression result = operation.simplify(expr0, expr1, constants);
 		
 		if (result.canEvaluate(constants)) {
 			final double value = result.evaluate(constants);

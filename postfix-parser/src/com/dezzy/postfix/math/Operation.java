@@ -36,6 +36,17 @@ public interface Operation {
 	public Expression derivative(final Expression op1, final Expression op2, final String varName);
 	
 	/**
+	 * Tries to simplify an operation. If the operation cannot be simplified, returns a new
+	 * SymbolicResult with the given operands and this operation.
+	 * 
+	 * @param op1 first operand
+	 * @param op2 second operand
+	 * @param constants known constants (unused at the moment)
+	 * @return simplified operation 
+	 */
+	public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants);
+	
+	/**
 	 * d0 + d1
 	 */
 	public static final Operation add = new Operation(){
@@ -55,6 +66,15 @@ public interface Operation {
 				return op2.derivative(varName);
 			} else {
 				return Value.ZERO;
+			}
+		}
+		
+		@Override
+		public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants) {
+			if (op1.equals(op2)) {
+				return new SymbolicResult(new Value(2), op1, Operation.multiply);
+			} else {
+				return new SymbolicResult(op1, op2, Operation.add);
 			}
 		}
 	};
@@ -79,6 +99,15 @@ public interface Operation {
 				return new SymbolicResult(Value.NEG_ONE, op2.derivative(varName), Operation.multiply);
 			} else {
 				return Value.ZERO;
+			}
+		}
+		
+		@Override
+		public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants) {
+			if (op1.equals(op2)) {
+				return Value.ZERO;
+			} else {
+				return new SymbolicResult(op1, op2, Operation.subtract);
 			}
 		}
 	};
@@ -109,6 +138,19 @@ public interface Operation {
 				return new SymbolicResult(op1, op2.derivative(varName), Operation.multiply);
 			} else {
 				return Value.ZERO;
+			}
+		}
+		
+		@Override
+		public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants) {
+			if (op1.equals(Value.ONE)) {
+				return op2;
+			} else if (op2.equals(Value.ONE)) {
+				return op1;
+			} else if (op1.equals(op2)) {
+				return new SymbolicResult(op1, new Value(2), Operation.power);
+			} else {
+				return new SymbolicResult(op1, op2, Operation.multiply);
 			}
 		}
 	};
@@ -145,6 +187,17 @@ public interface Operation {
 				return new SymbolicResult(coefficient, func, Operation.multiply);
 			} else {
 				return Value.ZERO;
+			}
+		}
+		
+		@Override
+		public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants) {
+			if (op2.equals(Value.ONE)) {
+				return op1;
+			} else if (op1.equals(op2)) {
+				return Value.ONE;
+			} else {
+				return new SymbolicResult(op1, op2, Operation.divide);
 			}
 		}
 	};
@@ -205,6 +258,19 @@ public interface Operation {
 				return new SymbolicResult(op2.derivative(varName), multiplied, Operation.multiply);
 			} else {
 				return Value.ZERO;
+			}
+		}
+		
+		@Override
+		public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants) {
+			if (op2.equals(Value.ZERO) || op1.equals(Value.ONE)) {
+				return Value.ONE;
+			} else if (op2.equals(Value.ONE)) {
+				return op1;
+			} else if (op1.equals(Value.ZERO)) {
+				return Value.ZERO;
+			} else {
+				return new SymbolicResult(op1, op2, Operation.power);
 			}
 		}
 	};
