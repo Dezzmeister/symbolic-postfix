@@ -18,7 +18,7 @@ public class Main {
 	}
 	
 	private static final void derivativeTest() {
-		final String[] tokens = "x sin".split(" ");
+		final String[] tokens = "x sin x ^".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expression = parser.createSymbolicStructure();
 		final Expression derivative = expression.derivative("x");

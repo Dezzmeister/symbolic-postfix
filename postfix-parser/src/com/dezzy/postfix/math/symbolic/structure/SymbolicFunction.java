@@ -88,6 +88,14 @@ public final class SymbolicFunction implements Expression {
 		return argument.isFunctionOf(varName);
 	}
 	
+	/**
+	 * Symbolically finds the derivative of this function and its applied argument
+	 * with respect to the given variable.
+	 * 
+	 * @param varName variable name
+	 * @return derivative expression
+	 */
+	@Override
 	public Expression derivative(final String varName) {
 		return function.derivative(argument, varName);
 	}
