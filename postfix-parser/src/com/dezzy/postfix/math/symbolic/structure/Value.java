@@ -146,7 +146,8 @@ public final class Value implements Expression {
 			return false;
 		} else {
 			final Value otherValue = (Value) other;
-			return equalsWithin(value, otherValue.value, epsilon);
+			//return equalsWithin(value, otherValue.value, epsilon);
+			return value == otherValue.value;
 		}
 	}
 	
