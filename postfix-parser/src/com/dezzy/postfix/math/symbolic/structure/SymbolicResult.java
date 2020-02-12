@@ -107,6 +107,17 @@ public class SymbolicResult implements Expression {
 	}
 	
 	/**
+	 * Returns true if either of this SymbolicResult's operands has a constant term.
+	 * 
+	 * @param constants known constants map
+	 * @return true if either of the operands has a constant term
+	 */
+	@Override
+	public boolean hasConstantTerm(final Map<String, Double> constants) {
+		return operand1.hasConstantTerm(constants) || operand2.hasConstantTerm(constants);
+	}
+	
+	/**
 	 * Returns a String representing this calculation, of the format:
 	 * <p> 
 	 * <code>(expr1 operator expr2)</code>

@@ -101,6 +101,17 @@ public final class SymbolicFunction implements Expression {
 	}
 	
 	/**
+	 * Returns true if the argument to this SymbolicFunction has a constant term.
+	 * 
+	 * @param constants known constants map
+	 * @return true if the argument to this function has a constant term
+	 */
+	@Override
+	public boolean hasConstantTerm(final Map<String, Double> constants) {
+		return argument.hasConstantTerm(constants);
+	}
+	
+	/**
 	 * Returns a string of the format: <code>func(arg)</code><br>
 	 * sin(x): <code>sin(x)</code><br>
 	 * abs(x ^ 2): <code>abs((x ^ 2))</code><br>

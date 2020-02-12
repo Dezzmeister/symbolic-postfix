@@ -51,6 +51,14 @@ public interface Expression {
 	public Expression derivative(final String varName);
 	
 	/**
+	 * Returns true if this Expression has a constant term.
+	 * 
+	 * @param known constants
+	 * @return true if this Expression has a constant
+	 */
+	public boolean hasConstantTerm(final Map<String, Double> constants);
+	
+	/**
 	 * Returns this expression in a readable form.
 	 * 
 	 * @return readable form of this expression

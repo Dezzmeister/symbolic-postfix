@@ -99,6 +99,18 @@ public class Unknown implements Expression {
 	}
 	
 	/**
+	 * Returns true if the known constants map has an entry for this Unknown.
+	 * If there is no entry, then this Unknown is a variable.
+	 * 
+	 * @param constants known constants map
+	 * @return true if <code>constants</code> contains {@link #varName}
+	 */
+	@Override
+	public boolean hasConstantTerm(final Map<String, Double> constants) {
+		return constants.containsKey(varName);
+	}
+	
+	/**
 	 * Returns the symbolic name of this unknown. Does not know or care about the value.
 	 * 
 	 * @return the symbolic name of this unknown

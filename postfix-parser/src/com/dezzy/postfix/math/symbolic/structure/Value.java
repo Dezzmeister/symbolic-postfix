@@ -113,6 +113,17 @@ public final class Value implements Expression {
 	}
 	
 	/**
+	 * Returns true, because a value is a constant.
+	 * 
+	 * @param known constants, ignored
+	 * @return true
+	 */
+	@Override
+	public boolean hasConstantTerm(final Map<String, Double> constants) {
+		return true;
+	}
+	
+	/**
 	 * Returns this value, converted to a String.
 	 * 
 	 * @return String representation of a double value

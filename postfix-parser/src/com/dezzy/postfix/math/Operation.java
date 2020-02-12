@@ -70,7 +70,7 @@ public interface Operation {
 		}
 		
 		@Override
-		public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants) {
+		public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants) {			
 			if (op1.equals(op2)) {
 				return new SymbolicResult(new Value(2), op1, Operation.multiply);
 			} else {
