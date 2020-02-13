@@ -111,6 +111,16 @@ public class Unknown implements Expression {
 	}
 	
 	/**
+	 * Returns true, because an Unknown is a simple mathematical unit.
+	 * 
+	 * @return true
+	 */
+	@Override
+	public boolean isSimple() {
+		return true;
+	}
+	
+	/**
 	 * Returns the symbolic name of this unknown. Does not know or care about the value.
 	 * 
 	 * @return the symbolic name of this unknown
@@ -118,6 +128,24 @@ public class Unknown implements Expression {
 	@Override
 	public final String toString() {
 		return varName;
+	}
+	
+	/**
+	 * If a mapping for this Unknown exists in <code>latexMappings</code>, returns the LaTeX
+	 * representation specified. <br>
+	 * If no mapping exists, returns the name of this Unknown, converted to a String. For Unknowns, the LaTeX representation
+	 * is equivalent to the plain String representation.
+	 * 
+	 * @param latexMappings user-specified LaTeX representations of named constants or variables
+	 * @return LaTeX representation
+	 */
+	@Override
+	public final String toLatex(final Map<String, String> latexMappings) {
+		if (latexMappings.containsKey(varName)) {
+			return latexMappings.get(varName);
+		} else {
+			return varName;
+		}
 	}
 	
 	/**

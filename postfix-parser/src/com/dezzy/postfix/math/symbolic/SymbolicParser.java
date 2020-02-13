@@ -38,8 +38,25 @@ public class SymbolicParser {
 	/**
 	 * Converts the expression represented by the parser's postfix tokens into a symbolic 
 	 * expression structure.
+	 * <p>
+	 * The symbolic expression structure is a tree that connects operations
+	 * in such a way that the program can perform symbolic computations (such as differentiation
+	 * with respect to a given variable). Every node in the tree is an {@link Expression},
+	 * and each node can be one of four items:
+	 * <ol>
+	 * <li>{@link Value}</li>
+	 * <li>{@link Unknown}</li>
+	 * <li>{@link SymbolicResult}</li>
+	 * <li>{@link SymbolicFunction}</li>
+	 * </ol>
+	 * The Expression tree is built in such a way that the order of operations is already known,
+	 * and a map of known constants can be passed in to simplify or evaluate the Expression.
+	 * Derivatives can be symbolically calculated with respect to any variable, and LaTeX representations
+	 * of Expressions can be generated.
 	 * 
 	 * @return symbolic expression
+	 * @see Expression
+	 * @see Expression#derivative(String)
 	 */
 	public final Expression createSymbolicStructure() {
 		final Deque<Expression> expressionStack = new ArrayDeque<Expression>(tokens.length - 1);

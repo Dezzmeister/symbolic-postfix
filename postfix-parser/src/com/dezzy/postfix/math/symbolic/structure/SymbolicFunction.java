@@ -112,6 +112,16 @@ public final class SymbolicFunction implements Expression {
 	}
 	
 	/**
+	 * Returns false, because a SymbolicFunction is not a simple mathematical unit.
+	 * 
+	 * @return false
+	 */
+	@Override
+	public boolean isSimple() {
+		return false;
+	}
+	
+	/**
 	 * Returns a string of the format: <code>func(arg)</code><br>
 	 * sin(x): <code>sin(x)</code><br>
 	 * abs(x ^ 2): <code>abs((x ^ 2))</code><br>
@@ -122,6 +132,17 @@ public final class SymbolicFunction implements Expression {
 	@Override
 	public final String toString() {
 		return Reserved.functions.inverseGet(function) + "(" + argument.toString() + ")";
+	}
+	
+	/**
+	 * Returns a LaTeX representation of this function and its argument.
+	 * 
+	 * @param latexMappings user-defined LaTeX representations of named constants and variables
+	 * @return LaTeX representation of this function and its argument
+	 */
+	@Override
+	public final String toLatex(final Map<String, String> latexMappings) {
+		return function.toLatex(argument, latexMappings);
 	}
 	
 	/**

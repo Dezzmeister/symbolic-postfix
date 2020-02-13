@@ -28,10 +28,16 @@ public final class Reserved {
 	 */
 	public static final Map<String, Double> constants;
 	
+	/**
+	 * Mapping of mathematical constant names (internal representations) to their LaTeX representations
+	 */
+	public static final Map<String, String> latexConstants;
+	
 	static {
 		operations = getOperations();
 		functions = getFunctions();
 		constants = getConstants();
+		latexConstants = getLatexConstants();
 	}
 	
 	/**
@@ -47,7 +53,6 @@ public final class Reserved {
 		out.put("*", Operation.multiply);
 		out.put("/", Operation.divide);
 		out.put("^", Operation.power);
-		//out.put("%", Operation.modulo);
 		
 		return out;
 	}
@@ -63,6 +68,22 @@ public final class Reserved {
 		
 		out.put("e", Math.E);
 		out.put("pi", Math.PI);
+		
+		return out;
+	}
+	
+	/**
+	 * Returns a mapping of symbolic names of known mathematical constants to LaTeX representations
+	 * of those constants.. <br>
+	 * Example: <code>"pi"</code> maps to <code>"\pi"</code>
+	 * 
+	 * @return mathematical constant LaTeX mappings
+	 */
+	private static final HashMap<String, String> getLatexConstants() {
+		final HashMap<String, String> out = new HashMap<String, String>();
+		
+		out.put("e", "e");
+		out.put("pi", "\\pi");
 		
 		return out;
 	}
@@ -124,5 +145,20 @@ public final class Reserved {
 		allConstants.putAll(additionalConstants);
 		
 		return allConstants;
+	}
+	
+	/**
+	 * Returns a complete list of special LaTeX mappings, including those for known mathematical constants (in {@link #latexConstants})
+	 * as well as those defined in <code>additionalMappings</code>.
+	 * 
+	 * @param additionalMappings additional, user-defined LaTeX representations of named constants and variables
+	 * @return a complete mapping of named constants and variables to their respective LaTeX representations, if the default representation will not suffice
+	 */
+	public static final Map<String, String> getCompleteLatexMappings(final Map<String, String> additionalMappings) {
+		final Map<String, String> allMappings = new HashMap<String, String>();
+		allMappings.putAll(Reserved.latexConstants);
+		allMappings.putAll(additionalMappings);
+		
+		return allMappings;
 	}
 }

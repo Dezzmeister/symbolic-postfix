@@ -113,7 +113,7 @@ public final class Value implements Expression {
 	}
 	
 	/**
-	 * Returns true, because a value is a constant.
+	 * Returns true, because a Value is a constant.
 	 * 
 	 * @param known constants, ignored
 	 * @return true
@@ -134,6 +134,25 @@ public final class Value implements Expression {
 	}
 	
 	/**
+	 * Returns this Value, converted to a String. For Values, the LaTeX representation
+	 * is equivalent to the plain String representation. If the value is close enough
+	 * (within {@link #epsilon}) to its rounded version, a String representation of the 
+	 * rounded value will be returned instead, which will remove any extra digits after
+	 * the decimal that may otherwise be returned by {@link Double#toString(double)}.
+	 * 
+	 * @param latexMappings user-specified LaTeX mappings, ignored
+	 * @return LaTeX representation
+	 */
+	@Override
+	public final String toLatex(final Map<String, String> latexMappings) {
+		if (equalsWithin(value, Math.round(value), epsilon)) {
+			return Long.toString(Math.round(value));
+		} else {
+			return Double.toString(value);
+		}
+	}
+	
+	/**
 	 * Returns true if these two Values have the same numeric value, within 
 	 * +/- {@link #epsilon}.
 	 * 
@@ -146,9 +165,29 @@ public final class Value implements Expression {
 			return false;
 		} else {
 			final Value otherValue = (Value) other;
-			//return equalsWithin(value, otherValue.value, epsilon);
-			return value == otherValue.value;
+			return equalsWithin(value, otherValue.value, epsilon);
 		}
+	}
+	
+	/**
+	 * Returns true if this value is an integer, within {@link #epsilon}. This check is
+	 * performed by comparing the true value to the closest integer (rounded value), and
+	 * determining if they are equal within {@link #epsilon}.
+	 * 
+	 * @return true if this value is close enough to an integer
+	 */
+	public boolean isInteger() {
+		return equalsWithin(value, Math.round(value), epsilon);
+	}
+	
+	/**
+	 * Returns true, because a Value is a simple mathematical unit.
+	 * 
+	 * @return true
+	 */
+	@Override
+	public boolean isSimple() {
+		return true;
 	}
 	
 	/**
@@ -162,14 +201,14 @@ public final class Value implements Expression {
 	}
 	
 	/**
-	 * Returns true if <code>d0</code> and <code>d1</code> and equal within +/- <code>epsilon</code>.
+	 * Returns true if <code>d0</code> and <code>d1</code> and equal within <code>epsilon</code>.
 	 * 
 	 * @param d0 first number
 	 * @param d1 second number
 	 * @param epsilon precision
-	 * @return true if <code>d0 == d1</code> within +/- <code>epsilon</code>
+	 * @return true if <code>d0 == d1</code> within <code>epsilon</code>
 	 */
 	private final boolean equalsWithin(final double d0, final double d1, final double epsilon) {
-		return ((d1 - epsilon) <= (d0 + epsilon)) || ((d1 + epsilon) >= (d0 - epsilon));
+		return (Math.abs(d0 - d1)) < epsilon;
 	}
 }

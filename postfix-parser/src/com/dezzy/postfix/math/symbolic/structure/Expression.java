@@ -59,11 +59,28 @@ public interface Expression {
 	public boolean hasConstantTerm(final Map<String, Double> constants);
 	
 	/**
+	 * Returns true if this Expression is a simple mathematical unit (a constant or a variable).
+	 * 
+	 * @return true if this Expression is a {@link Value} or an {@link Unknown}
+	 */
+	public boolean isSimple();
+	
+	/**
 	 * Returns this expression in a readable form.
 	 * 
 	 * @return readable form of this expression
 	 */
 	public String toString();
+	
+	/**
+	 * Converts this Expression into a LaTeX string. Allows any constant or variable
+	 * to have a special LaTeX representation through <code>latexMappings</code>. For example,
+	 * an {@link Unknown} with <code>"Phi"</code> may map to <code>"\Phi"</code>
+	 * 
+	 * @param latexMappings maps constant names to their LaTeX representations 
+	 * @return LaTeX representation of this expression
+	 */
+	public String toLatex(final Map<String, String> latexMappings);
 	
 	/**
 	 * Returns true if this expression is equivalent to another before performing any

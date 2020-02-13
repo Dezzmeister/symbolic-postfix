@@ -118,6 +118,16 @@ public class SymbolicResult implements Expression {
 	}
 	
 	/**
+	 * Returns false, because a SymbolicResult is not a simple mathematical unit.
+	 * 
+	 * @return false
+	 */
+	@Override
+	public boolean isSimple() {
+		return false;
+	}
+	
+	/**
 	 * Returns a String representing this calculation, of the format:
 	 * <p> 
 	 * <code>(expr1 operator expr2)</code>
@@ -131,6 +141,17 @@ public class SymbolicResult implements Expression {
 	@Override
 	public final String toString() {
 		return "(" + operand1.toString() + " " + Reserved.operationTokenLookup(operation) + " " + operand2.toString() + ")";
+	}
+	
+	/**
+	 * Returns this SymbolicResult, converted to a LaTeX string.
+	 * 
+	 * @param latexMappings user-specified LaTeX representations of named constants and variables
+	 * @return LaTeX representation
+	 */
+	@Override
+	public final String toLatex(final Map<String, String> latexMappings) {
+		return operation.toLaTeX(operand1, operand2, latexMappings);
 	}
 	
 	/**

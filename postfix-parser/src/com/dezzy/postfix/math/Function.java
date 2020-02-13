@@ -1,5 +1,7 @@
 package com.dezzy.postfix.math;
 
+import java.util.Map;
+
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicFunction;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
@@ -31,6 +33,15 @@ public interface Function {
 	public Expression derivative(final Expression arg, final String varName);
 	
 	/**
+	 * Converts this function and an argument into a LaTeX representation.
+	 * 
+	 * @param arg argument
+	 * @param latexMappings user-defined LaTeX representations of named constants and variables
+	 * @return LaTeX representation of the function and the argument
+	 */
+	public String toLatex(final Expression arg, final Map<String, String> latexMappings);
+	
+	/**
 	 * @see Math#sin(double)
 	 */
 	public static final Function sin = new Function() {
@@ -48,6 +59,11 @@ public interface Function {
 			} else {
 				return Value.ZERO;
 			}
+		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\sin{" + arg.toLatex(latexMappings) + "}";
 		}
 	};
 	
@@ -71,6 +87,11 @@ public interface Function {
 				return Value.ZERO;
 			}
 		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\cos{" + arg.toLatex(latexMappings) + "}";
+		}
 	};
 	
 	/**
@@ -92,6 +113,11 @@ public interface Function {
 			} else {
 				return Value.ZERO;
 			}
+		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\tan{" + arg.toLatex(latexMappings) + "}";
 		}
 	};
 	
@@ -116,6 +142,11 @@ public interface Function {
 			} else {
 				return Value.ZERO;
 			}
+		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\sin^{-1}{" + arg.toLatex(latexMappings) + "}";
 		}
 	};
 	
@@ -142,6 +173,11 @@ public interface Function {
 				return Value.ZERO;
 			}
 		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\cos^{-1}{" + arg.toLatex(latexMappings) + "}";
+		}
 	};
 	
 	/**
@@ -166,6 +202,11 @@ public interface Function {
 				return Value.ZERO;
 			}
 		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\tan^{-1}{" + arg.toLatex(latexMappings) + "}";
+		}
 	};
 	
 	/**
@@ -188,6 +229,11 @@ public interface Function {
 				return Value.ZERO;
 			}
 		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\sinh{" + arg.toLatex(latexMappings) + "}";
+		}
 	};
 	
 	/**
@@ -209,6 +255,11 @@ public interface Function {
 			} else {
 				return Value.ZERO;
 			}
+		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\cosh{" + arg.toLatex(latexMappings) + "}";
 		}
 	};
 	
@@ -234,6 +285,11 @@ public interface Function {
 				return Value.ZERO;
 			}
 		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\tanh{" + arg.toLatex(latexMappings) + "}";
+		}
 	};
 	
 	/**
@@ -255,6 +311,11 @@ public interface Function {
 			} else {
 				return Value.ZERO;
 			}
+		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\log_{2}{" + arg.toLatex(latexMappings) + "}";
 		}
 	};
 	
@@ -280,6 +341,11 @@ public interface Function {
 				return Value.ZERO;
 			}
 		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\log_{10}{" + arg.toLatex(latexMappings) + "}";
+		}
 	};
 	
 	/**
@@ -302,6 +368,11 @@ public interface Function {
 			} else {
 				return Value.ZERO;
 			}
+		}
+		
+		@Override
+		public String toLatex(final Expression arg, final Map<String, String> latexMappings) {
+			return "\\left|" + arg.toLatex(latexMappings) + "\right|";
 		}
 	};	
 }

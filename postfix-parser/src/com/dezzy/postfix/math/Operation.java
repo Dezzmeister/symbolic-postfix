@@ -47,6 +47,16 @@ public interface Operation {
 	public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants);
 	
 	/**
+	 * Converts this operation on two Expressions into a LaTeX representation.
+	 * 
+	 * @param op1 first operand
+	 * @param op2 second operand
+	 * @param latexMappings user-specified LaTeX representations of named constants and variables
+	 * @return LaTeX representation of this operation
+	 */
+	public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings);
+	
+	/**
 	 * d0 + d1
 	 */
 	public static final Operation add = new Operation(){
@@ -76,6 +86,11 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.add);
 			}
+		}
+		
+		@Override
+		public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
+			return "\\left(" + op1.toLatex(latexMappings) + " + " + op2.toLatex(latexMappings) + "\\right)";
 		}
 	};
 	
@@ -109,6 +124,11 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.subtract);
 			}
+		}
+		
+		@Override
+		public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
+			return "\\left(" + op1.toLatex(latexMappings) + " - " + op2.toLatex(latexMappings) + "\\right)";
 		}
 	};
 	
@@ -152,6 +172,27 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.multiply);
 			}
+		}
+		
+		@Override
+		public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
+			final Expression first;
+			final Expression second;
+			final boolean useDot = !(op1.isSimple() || op2.isSimple());
+			
+			
+			if (op1.isSimple() && !op2.isSimple()) {
+				first = op1;
+				second = op2;
+			} else if (!op1.isSimple() && op2.isSimple()) {
+				first = op2;
+				second = op1;
+			} else {
+				first = op1;
+				second = op2;
+			}
+			
+			return "\\left(" + first.toLatex(latexMappings) + (useDot ? " \\cdot " : "") + second.toLatex(latexMappings) + "\\right)";
 		}
 	};
 	
@@ -199,6 +240,11 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.divide);
 			}
+		}
+		
+		@Override
+		public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
+			return "\\frac{" + op1.toLatex(latexMappings) + "}{" + op2.toLatex(latexMappings) + "}";
 		}
 	};
 	
@@ -273,12 +319,10 @@ public interface Operation {
 				return new SymbolicResult(op1, op2, Operation.power);
 			}
 		}
+		
+		@Override
+		public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
+			return op1.toLatex(latexMappings) + "^{" + op2.toLatex(latexMappings) + "}";
+		}
 	};
-	
-	
-	/**
-	 * d0 % d1
-	 
-	public static final Operation modulo = (d0, d1) -> d0 % d1;
-	*/
 }
