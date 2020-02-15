@@ -322,7 +322,7 @@ public interface Operation {
 		
 		@Override
 		public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
-			return op1.toLatex(latexMappings) + "^{" + op2.toLatex(latexMappings) + "}";
+			return "\\left(" + op1.toLatex(latexMappings) + "^{" + op2.toLatex(latexMappings) + "}\\right)";
 		}
 	};
 }

@@ -23,7 +23,7 @@ public class Main {
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();
 		final Expression deriv = expr.derivative("x");
-		final Expression simpleDeriv = deriv.simplify(new HashMap<String, Double>());
+		final Expression simpleDeriv = deriv.simplify(Reserved.constants);
 		System.out.println(simpleDeriv);
 		System.out.println(simpleDeriv.toLatex(Reserved.latexConstants));
 	}
