@@ -66,6 +66,15 @@ public interface Expression {
 	public boolean isSimple();
 	
 	/**
+	 * Converts decimals to known constants, or if no constant exists for the decimal,
+	 * converts it into a fraction.
+	 * 
+	 * @param constants known constants
+	 * @return a new version of this Expression without decimals
+	 */
+	public Expression cleanDecimals(final Map<String, Double> constants);
+	
+	/**
 	 * Returns this expression in a readable form.
 	 * 
 	 * @return readable form of this expression

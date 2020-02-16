@@ -138,6 +138,17 @@ public class SymbolicResult implements Expression {
 	}
 	
 	/**
+	 * Returns a version of this SymbolicResult where the operands have no decimals.
+	 * 
+	 * @param constants known constants
+	 * @return a new SymbolicResult without decimal expressions
+	 */
+	@Override
+	public Expression cleanDecimals(final Map<String, Double> constants) {
+		return new SymbolicResult(operand1.cleanDecimals(constants), operand2.cleanDecimals(constants), operation);
+	}
+	
+	/**
 	 * Returns a String representing this calculation, of the format:
 	 * <p> 
 	 * <code>(expr1 operator expr2)</code>

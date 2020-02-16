@@ -31,12 +31,12 @@ public class Main {
 	}
 	
 	private static final void derivTest2() {
-		//final String[] tokens = "e x ^ 2 *".split(" ");
-		final String[] tokens = "x 2 ^ 3 *".split(" ");
+		final String[] tokens = "e x ^ 1.66666666 *".split(" ");
+		//final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();
 		final Expression deriv = expr.derivative("x");
-		final Expression simpleDeriv = deriv.simplify(Reserved.constants);
+		final Expression simpleDeriv = deriv.simplify(Reserved.constants).cleanDecimals(Reserved.constants);
 		System.out.println(simpleDeriv);
 		System.out.println(simpleDeriv.toLatex(Reserved.latexConstants));
 	}

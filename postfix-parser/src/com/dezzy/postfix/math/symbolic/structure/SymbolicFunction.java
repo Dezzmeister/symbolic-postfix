@@ -122,6 +122,17 @@ public final class SymbolicFunction implements Expression {
 	}
 	
 	/**
+	 * Returns a version of this SymbolicFunction where the argument has no decimals.
+	 * 
+	 * @param constants known constants
+	 * @return a new SymbolicFunction where the argument contains no decimal expressions
+	 */
+	@Override
+	public Expression cleanDecimals(final Map<String, Double> constants) {
+		return new SymbolicFunction(argument.cleanDecimals(constants), function);
+	}
+	
+	/**
 	 * Returns a string of the format: <code>func(arg)</code><br>
 	 * sin(x): <code>sin(x)</code><br>
 	 * abs(x ^ 2): <code>abs((x ^ 2))</code><br>

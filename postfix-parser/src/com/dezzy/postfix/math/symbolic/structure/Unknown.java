@@ -121,6 +121,17 @@ public class Unknown implements Expression {
 	}
 	
 	/**
+	 * Returns this Unknown, because it already isn't a decimal.
+	 * 
+	 * @param constants known constants
+	 * @return this Unknown
+	 */
+	@Override
+	public Expression cleanDecimals(final Map<String, Double> constants) {
+		return this;
+	}
+	
+	/**
 	 * Returns the symbolic name of this unknown. Does not know or care about the value.
 	 * 
 	 * @return the symbolic name of this unknown

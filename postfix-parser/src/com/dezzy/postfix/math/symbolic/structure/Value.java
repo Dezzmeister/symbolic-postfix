@@ -1,7 +1,10 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+
+import com.dezzy.postfix.math.Operation;
 
 /**
  * The simplest form of an expression; a known value. Instead of just using doubles, a separate class was created
@@ -130,7 +133,57 @@ public final class Value implements Expression {
 	 */
 	@Override
 	public final String toString() {
-		return Double.toString(value);
+		if (isInteger()) {
+			return Long.toString(Math.round(value));
+		} else {
+			return Double.toString(value);
+		}
+	}
+	
+	/**
+	 * If this Value is an integer within {@link #epsilon}, returns a new Value with this value rounded to the nearest integer. <br>
+	 * If this Value maps to a known constant within {@link epsilon}, returns a new {@link Unknown} with the name of the constant. <br>
+	 * If this Value is not an integer and does not map to a known constant, returns a new {@link SymbolicResult} with this Value
+	 * represented as a fraction within {@link #epsilon}.
+	 * 
+	 * @param constants known constants
+	 * @return a version of this Value with either an integer Value, a constant/variable name, or a fraction
+	 */
+	@Override
+	public final Expression cleanDecimals(final Map<String, Double> constants) {
+		for (final Entry<String, Double> entry : constants.entrySet()) {
+			if (equalsWithin(value, entry.getValue(), epsilon)) {
+				return new Unknown(entry.getKey());
+			}
+		}
+		
+		if (isInteger()) {
+			return new Value(Math.round(value));
+		}
+		
+		final int n = (int) Math.floor(value);
+		final double x = value - n;
+		
+		int lowerN = 0;
+		int lowerD = 1;
+		
+		int upperN = 1;
+		int upperD = 1;
+		
+		while (true) {
+			final int middleN = lowerN + upperN;
+			final int middleD = lowerD + upperD;
+			
+			if (middleD * (x + epsilon) < middleN) {
+				upperN = middleN;
+				upperD = middleD;
+			} else if (middleD * (x - epsilon) > middleN) {
+				lowerN = middleN;
+				lowerD = middleD;
+			} else {
+				return new SymbolicResult(new Value((n * middleD) + middleN), new Value(middleD), Operation.divide);
+			}
+		}
 	}
 	
 	/**
@@ -145,7 +198,7 @@ public final class Value implements Expression {
 	 */
 	@Override
 	public final String toLatex(final Map<String, String> latexMappings) {
-		if (equalsWithin(value, Math.round(value), epsilon)) {
+		if (isInteger()) {
 			return Long.toString(Math.round(value));
 		} else {
 			return Double.toString(value);
