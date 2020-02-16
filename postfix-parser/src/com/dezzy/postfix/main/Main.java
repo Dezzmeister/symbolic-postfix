@@ -3,9 +3,13 @@ package com.dezzy.postfix.main;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.dezzy.postfix.math.Operation;
 import com.dezzy.postfix.math.Reserved;
 import com.dezzy.postfix.math.symbolic.SymbolicParser;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
+import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
+import com.dezzy.postfix.math.symbolic.structure.Unknown;
+import com.dezzy.postfix.math.symbolic.structure.Value;
 
 @SuppressWarnings("unused")
 public class Main {
@@ -16,10 +20,19 @@ public class Main {
 		//sphereTest();
 		//derivativeTest();
 		derivTest2();
+		//distributionTest();
+	}
+	
+	private static final void distributionTest() {
+		final Expression outer = new Value(3);
+		final SymbolicResult group = new SymbolicResult(new Unknown("x"), new Value(2), Operation.subtract);
+		final Expression simple = Operation.add.distribute(outer, group, Reserved.constants);
+		System.out.println(simple);
 	}
 	
 	private static final void derivTest2() {
-		final String[] tokens = "e x ^ 2 *".split(" ");
+		//final String[] tokens = "e x ^ 2 *".split(" ");
+		final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();
 		final Expression deriv = expr.derivative("x");

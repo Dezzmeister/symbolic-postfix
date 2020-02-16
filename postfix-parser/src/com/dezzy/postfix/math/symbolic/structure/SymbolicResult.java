@@ -86,7 +86,17 @@ public class SymbolicResult implements Expression {
 			final double value = result.evaluate(constants);
 			return new Value(value);
 		} else {
-			return result;
+			if (expr1 instanceof SymbolicResult) {
+				final Expression simplified = operation.distribute(expr0, (SymbolicResult) expr1, constants);
+				
+				return simplified;
+			} else if (expr0 instanceof SymbolicResult && operation.isCommutative()) {
+				final Expression simplified = operation.distribute(expr1, (SymbolicResult) expr0, constants);
+				
+				return simplified;
+			} else {
+				return result;
+			}
 		}
 	}
 	

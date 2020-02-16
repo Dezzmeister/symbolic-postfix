@@ -46,6 +46,10 @@ public interface Operation {
 	 */
 	public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants);
 	
+	public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants);
+	
+	public boolean isCommutative();
+	
 	/**
 	 * Converts this operation on two Expressions into a LaTeX representation.
 	 * 
@@ -89,6 +93,62 @@ public interface Operation {
 		}
 		
 		@Override
+		public boolean isCommutative() {
+			return true;
+		}
+		
+		@Override
+		public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+			//fst + group
+			
+			if (!fst.canEvaluate(constants)) {
+				//Can't simplify the outside term
+				return new SymbolicResult(fst, group, Operation.add);
+			}
+			
+			final Expression op1 = group.operand1;
+			final Expression op2 = group.operand2;
+			
+			if (group.operation == Operation.add) {				
+				if (op1.canEvaluate(constants)) {
+					//Simplify op1
+					final Expression simple = new Value(fst.evaluate(constants) + op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						//Now simplify op2
+						return new Value(simple.evaluate(constants) + op2.evaluate(constants));
+					} else {
+						return new SymbolicResult(simple, op2, Operation.add);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					//Simplify op2, can't simplify op1
+					final Expression simple = new Value(fst.evaluate(constants) + op2.evaluate(constants));
+					return new SymbolicResult(simple, op1, Operation.add);
+				} else {
+					//Can't simplify group operands
+					return new SymbolicResult(fst, group, Operation.add);
+				}
+			} else if (group.operation == Operation.subtract) {				
+				if (op1.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) + op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						return new Value(simple.evaluate(constants) - op2.evaluate(constants));
+					} else {
+						return new SymbolicResult(simple, op2, Operation.subtract);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) - op2.evaluate(constants));
+					return new SymbolicResult(simple, op1, Operation.add);
+				} else {
+					return new SymbolicResult(fst, group, Operation.add);
+				}
+			} else {
+				return new SymbolicResult(fst, group, Operation.add);
+			}			
+		}
+		
+		@Override
 		public String toLaTeX(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
 			return "\\left(" + op1.toLatex(latexMappings) + " + " + op2.toLatex(latexMappings) + "\\right)";
 		}
@@ -124,6 +184,57 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.subtract);
 			}
+		}
+		
+		@Override
+		public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+			if (!fst.canEvaluate(constants)) {
+				return new SymbolicResult(fst, group, Operation.subtract);
+			}
+			
+			final Expression op1 = group.operand1;
+			final Expression op2 = group.operand2;
+			
+			if (group.operation == Operation.add) {
+				if (op1.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) - op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						return new Value(simple.evaluate(constants) - op2.evaluate(constants));
+					} else {
+						return new SymbolicResult(simple, op2, Operation.subtract);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) - op2.evaluate(constants));
+					
+					return new SymbolicResult(simple, op1, Operation.subtract);
+				} else {
+					return new SymbolicResult(fst, group, Operation.subtract);
+				}
+			} else if (group.operation == Operation.subtract) {
+				if (op1.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) - op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						return new Value(simple.evaluate(constants) + op2.evaluate(constants));
+					} else {
+						return new SymbolicResult(simple, op2, Operation.add);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) + op2.evaluate(constants));
+					
+					return new SymbolicResult(simple, op1, Operation.subtract);
+				} else {
+					return new SymbolicResult(fst, group, Operation.subtract);
+				}
+			} else {
+				return new SymbolicResult(fst, group, Operation.subtract);
+			}
+		}
+		
+		@Override
+		public boolean isCommutative() {
+			return false;
 		}
 		
 		@Override
@@ -172,6 +283,127 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.multiply);
 			}
+		}
+		
+		@Override
+		public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+			if (!fst.canEvaluate(constants)) {
+				return new SymbolicResult(fst, group, Operation.multiply);
+			}
+			
+			final Expression op1 = group.operand1;
+			final Expression op2 = group.operand2;
+			
+			if (group.operation == Operation.add) {
+				//fst * (op1 + op2)
+				//(fst * op1) + (fst * op2)
+				
+				if (op1.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) * op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						return new Value(simple.evaluate(constants) + (fst.evaluate(constants) * op2.evaluate(constants)));
+					} else {
+						final Expression distributedThd = new SymbolicResult(fst, op2, Operation.multiply);
+						
+						return new SymbolicResult(simple, distributedThd, Operation.add);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) * op2.evaluate(constants));
+					final Expression distributedSnd = new SymbolicResult(fst, op1, Operation.multiply);
+					
+					return new SymbolicResult(simple, distributedSnd, Operation.add);
+				} else {
+					return new SymbolicResult(fst, group, Operation.multiply);
+				}
+			} else if (group.operation == Operation.subtract) {
+				//fst * (op1 - op2)
+				//(fst * op1) - (fst * op2)
+				
+				if (op1.canEvaluate(constants)) {
+					//fst * op1
+					final Expression simple = new Value(fst.evaluate(constants) * op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						//(fst * op1) - (fst * op2)
+						return new Value(simple.evaluate(constants) - (fst.evaluate(constants) * op2.evaluate(constants)));
+					} else {
+						//fst * op2
+						final Expression distributedThd = new SymbolicResult(fst, op2, Operation.multiply);
+						
+						//(fst * op1) - (fst * op2)
+						return new SymbolicResult(simple, distributedThd, Operation.subtract);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					//fst * op2
+					final Expression simple = new Value(fst.evaluate(constants) * op2.evaluate(constants));
+					
+					//fst * op1
+					final Expression distributedSnd = new SymbolicResult(fst, op1, Operation.multiply);
+					
+					//(fst * op1) - (fst * op2)
+					return new SymbolicResult(distributedSnd, simple, Operation.subtract);
+				} else {
+					//Default case
+					return new SymbolicResult(fst, group, Operation.multiply);
+				}
+			} else if (group.operation == Operation.multiply) {
+				//fst * (op1 * op2)
+				
+				if (op1.canEvaluate(constants)) {
+					//fst * op1
+					final Expression simple = new Value(fst.evaluate(constants) * op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						//fst * op1 * op2
+						return new Value(simple.evaluate(constants) * op2.evaluate(constants));
+					} else {
+						//(fst * op1) * op2
+						return new SymbolicResult(simple, op2, Operation.multiply);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					//fst * op2
+					final Expression simple = new Value(fst.evaluate(constants) * op2.evaluate(constants));
+					
+					//(fst * op2) * op1
+					return new SymbolicResult(simple, op1, Operation.multiply);
+				} else {
+					//Default case
+					return new SymbolicResult(fst, group, Operation.multiply);
+				}
+			} else if (group.operation == Operation.divide) {
+				//fst * (op1 / op2)
+				
+				if (op1.canEvaluate(constants)) {
+					//fst * op1
+					final Expression simple = new Value(fst.evaluate(constants) * op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						//(fst * op1) / op2
+						return new Value(simple.evaluate(constants) / op2.evaluate(constants));
+					} else {
+						//(fst * op1) / op2
+						return new SymbolicResult(simple, op2, Operation.divide);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					//fst / op2
+					final Expression simple = new Value(fst.evaluate(constants) / op2.evaluate(constants));
+					
+					//(fst / op2) * op1
+					return new SymbolicResult(simple, op1, Operation.multiply);
+				} else {
+					//Default case
+					return new SymbolicResult(fst, group, Operation.multiply);
+				}
+			} else {
+				//Default case, when no simplification can be performed
+				return new SymbolicResult(fst, group, Operation.multiply);
+			}
+		}
+		
+		@Override
+		public boolean isCommutative() {
+			return true;
 		}
 		
 		@Override
@@ -240,6 +472,16 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.divide);
 			}
+		}
+		
+		@Override
+		public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+			return new SymbolicResult(fst, group, Operation.divide);
+		}
+		
+		@Override
+		public boolean isCommutative() {
+			return false;
 		}
 		
 		@Override
@@ -318,6 +560,16 @@ public interface Operation {
 			} else {
 				return new SymbolicResult(op1, op2, Operation.power);
 			}
+		}
+		
+		@Override
+		public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+			return new SymbolicResult(fst, group, Operation.power);
+		}
+		
+		@Override
+		public boolean isCommutative() {
+			return false;
 		}
 		
 		@Override
