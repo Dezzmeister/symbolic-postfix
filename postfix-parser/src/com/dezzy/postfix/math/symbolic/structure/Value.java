@@ -15,19 +15,36 @@ import com.dezzy.postfix.math.Operation;
 public final class Value implements Expression {
 	
 	/**
-	 * Zero
+	 * 0.
+	 * <p>
+	 * This constant is declared because it is used often; and the constant version of 0
+	 * should be used instead of allocating a new Value.
 	 */
 	public static final Value ZERO = new Value(0);
 	
 	/**
-	 * One
+	 * 1.
+	 * <p>
+	 * This constant is declared because it is used often; and the constant version of 1
+	 * should be used instead of allocating a new Value.
 	 */
 	public static final Value ONE = new Value(1);
 	
 	/**
-	 * Negative one
+	 * -1.
+	 * <p>
+	 * This constant is declared because it is used often; and the constant version of -1
+	 * should be used instead of allocating a new Value.
 	 */
 	public static final Value NEG_ONE = new Value(-1);
+	
+	/**
+	 * 2.
+	 * <p>
+	 * This constant is declared because it is used often; and the constant version of 2
+	 * should be used instead of allocating a new Value.
+	 */
+	public static final Value TWO = new Value(2);
 	
 	/**
 	 * Used internally to check for equality, specifies the precision of the check.
@@ -127,7 +144,8 @@ public final class Value implements Expression {
 	}
 	
 	/**
-	 * Returns this value, converted to a String.
+	 * Returns this value, converted to a String. If this value {@link #isInteger() is an integer},
+	 * rounds it and uses {@link Long#toString(long)} to return a string without decimals.
 	 * 
 	 * @return String representation of a double value
 	 */
@@ -181,7 +199,7 @@ public final class Value implements Expression {
 				lowerN = middleN;
 				lowerD = middleD;
 			} else {
-				return new SymbolicResult(new Value((n * middleD) + middleN), new Value(middleD), Operation.divide);
+				return new SymbolicResult(new Value((n * middleD) + middleN), new Value(middleD), Operation.DIVIDE);
 			}
 		}
 	}

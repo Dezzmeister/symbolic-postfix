@@ -25,13 +25,13 @@ public class Main {
 	
 	private static final void distributionTest() {
 		final Expression outer = new Value(3);
-		final SymbolicResult group = new SymbolicResult(new Unknown("x"), new Value(2), Operation.subtract);
-		final Expression simple = Operation.add.distribute(outer, group, Reserved.constants);
+		final SymbolicResult group = new SymbolicResult(new Unknown("x"), new Value(2), Operation.SUBTRACT);
+		final Expression simple = Operation.ADD.distribute(outer, group, Reserved.constants);
 		System.out.println(simple);
 	}
 	
 	private static final void derivTest2() {
-		final String[] tokens = "e x ^ 1.66666666 *".split(" ");
+		final String[] tokens = "1 2 x * /".split(" ");
 		//final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();

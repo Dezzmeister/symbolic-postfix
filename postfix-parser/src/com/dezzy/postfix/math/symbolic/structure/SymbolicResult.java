@@ -80,24 +80,25 @@ public class SymbolicResult implements Expression {
 	public Expression simplify(final Map<String, Double> constants) {
 		final Expression expr0 = operand1.simplify(constants);
 		final Expression expr1 = operand2.simplify(constants);
-		final Expression result = operation.simplify(expr0, expr1, constants);
+		final Expression result = operation.simplify(expr0, expr1);
 		
 		if (result.canEvaluate(constants)) {
-			final double value = result.evaluate(constants);
-			return new Value(value);
-		} else {
-			if (expr1 instanceof SymbolicResult) {
-				final Expression simplified = operation.distribute(expr0, (SymbolicResult) expr1, constants);
-				
-				return simplified;
-			} else if (expr0 instanceof SymbolicResult && operation.isCommutative()) {
-				final Expression simplified = operation.distribute(expr1, (SymbolicResult) expr0, constants);
-				
-				return simplified;
-			} else {
-				return result;
+			return new Value(result.evaluate(constants));
+		}
+		
+		if (result instanceof SymbolicResult) {
+			final SymbolicResult sResult = (SymbolicResult) result;
+			final Expression op1 = sResult.operand1;
+			final Expression op2 = sResult.operand2;
+			
+			if (op2 instanceof SymbolicResult) {
+				return sResult.operation.distribute(op1, (SymbolicResult) op2, constants);
+			} else if (op1 instanceof SymbolicResult && sResult.operation.isCommutative()) {
+				return sResult.operation.distribute(op2, (SymbolicResult) op1, constants); 
 			}
 		}
+		
+		return result;
 	}
 	
 	/**
@@ -172,7 +173,7 @@ public class SymbolicResult implements Expression {
 	 */
 	@Override
 	public final String toLatex(final Map<String, String> latexMappings) {
-		return operation.toLaTeX(operand1, operand2, latexMappings);
+		return operation.toLatex(operand1, operand2, latexMappings);
 	}
 	
 	/**

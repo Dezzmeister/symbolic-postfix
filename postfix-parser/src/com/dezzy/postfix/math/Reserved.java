@@ -48,11 +48,11 @@ public final class Reserved {
 	private static final BiMap<String, Operation> getOperations() {
 		final BiMap<String, Operation> out = new BiMap<String, Operation>(new HashMap<String, Operation>(), new HashMap<Operation, String>());
 		
-		out.put("+", Operation.add);
-		out.put("-", Operation.subtract);
-		out.put("*", Operation.multiply);
-		out.put("/", Operation.divide);
-		out.put("^", Operation.power);
+		out.put("+", Operation.ADD);
+		out.put("-", Operation.SUBTRACT);
+		out.put("*", Operation.MULTIPLY);
+		out.put("/", Operation.DIVIDE);
+		out.put("^", Operation.POWER);
 		
 		return out;
 	}
