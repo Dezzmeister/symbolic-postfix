@@ -1,5 +1,6 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -202,6 +203,17 @@ public final class Value implements Expression {
 				return new SymbolicResult(new Value((n * middleD) + middleN), new Value(middleD), Operation.DIVIDE);
 			}
 		}
+	}
+	
+	/**
+	 * Returns a new empty {@link List}, because a Value has no unknowns.
+	 * 
+	 * @param constants known constants (ignored)
+	 * @return empty {@link List}
+	 */
+	@Override
+	public final List<Unknown> getUnknowns(final Map<String, Double> constants) {
+		return List.of();
 	}
 	
 	/**

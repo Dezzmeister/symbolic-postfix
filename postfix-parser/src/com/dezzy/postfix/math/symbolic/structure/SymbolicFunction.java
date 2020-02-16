@@ -1,5 +1,6 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -130,6 +131,17 @@ public final class SymbolicFunction implements Expression {
 	@Override
 	public Expression cleanDecimals(final Map<String, Double> constants) {
 		return new SymbolicFunction(argument.cleanDecimals(constants), function);
+	}
+	
+	/**
+	 * Returns the unknowns in this SymbolicFunction's {@link #argument}.
+	 * 
+	 * @param constants known constants
+	 * @return unknowns in the argument
+	 */
+	@Override
+	public List<Unknown> getUnknowns(final Map<String, Double> constants) {
+		return argument.getUnknowns(constants);
 	}
 	
 	/**

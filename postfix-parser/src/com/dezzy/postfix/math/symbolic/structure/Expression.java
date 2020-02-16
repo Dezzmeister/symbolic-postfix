@@ -1,5 +1,6 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,6 +74,16 @@ public interface Expression {
 	 * @return a new version of this Expression without decimals
 	 */
 	public Expression cleanDecimals(final Map<String, Double> constants);
+	
+	/**
+	 * Returns a list of all unknowns in this Expression, given the known constants. <br>
+	 * This method does not return all {@link Unknown Unknowns}, only those that are not
+	 * defined by <code>constants</code>.
+	 * 
+	 * @param constants known constants
+	 * @return list of all unknowns
+	 */
+	public List<Unknown> getUnknowns(final Map<String, Double> constants);
 	
 	/**
 	 * Returns this expression in a readable form.

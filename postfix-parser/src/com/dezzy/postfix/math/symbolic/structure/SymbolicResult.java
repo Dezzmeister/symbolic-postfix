@@ -1,5 +1,7 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -147,6 +149,21 @@ public class SymbolicResult implements Expression {
 	@Override
 	public Expression cleanDecimals(final Map<String, Double> constants) {
 		return new SymbolicResult(operand1.cleanDecimals(constants), operand2.cleanDecimals(constants), operation);
+	}
+	
+	/**
+	 * Returns an {@link ArrayList} of all unknowns in both operands.
+	 * 
+	 * @param constants known constants
+	 * @return a {@link List} of all unknowns
+	 */
+	@Override
+	public List<Unknown> getUnknowns(final Map<String, Double> constants) {
+		final List<Unknown> out = new ArrayList<Unknown>();
+		out.addAll(operand1.getUnknowns(constants));
+		out.addAll(operand2.getUnknowns(constants));
+		
+		return out;
 	}
 	
 	/**

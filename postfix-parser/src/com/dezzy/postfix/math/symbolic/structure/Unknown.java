@@ -1,5 +1,6 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ import java.util.Objects;
  * 
  * @author Joe Desmond
  */
-public class Unknown implements Expression {
+public final class Unknown implements Expression {
 	
 	/**
 	 * String representation of this unknown
@@ -50,7 +51,7 @@ public class Unknown implements Expression {
 	 * @return true if this Unknown is defined in <code>constants</code>
 	 */
 	@Override
-	public boolean canEvaluate(final Map<String, Double> constants) {
+	public final boolean canEvaluate(final Map<String, Double> constants) {
 		return constants.containsKey(varName);
 	}
 	
@@ -62,7 +63,7 @@ public class Unknown implements Expression {
 	 * @return a simplified Value, or <code>this</code> if this cannot be simplified
 	 */
 	@Override
-	public Expression simplify(final Map<String, Double> constants) {
+	public final Expression simplify(final Map<String, Double> constants) {
 		if (canEvaluate(constants)) {
 			return new Value(evaluate(constants));
 		} else {
@@ -77,7 +78,7 @@ public class Unknown implements Expression {
 	 * @return true if this Unknown is the specified variable
 	 */
 	@Override
-	public boolean isFunctionOf(final String varName) {
+	public final boolean isFunctionOf(final String varName) {
 		return varName.equals(this.varName);
 	}
 	
@@ -90,7 +91,7 @@ public class Unknown implements Expression {
 	 * @return zero or one (as a {@link Value})
 	 */
 	@Override
-	public Expression derivative(final String varName) {
+	public final Expression derivative(final String varName) {
 		if (varName.equals(this.varName)) {
 			return Value.ONE;
 		} else {
@@ -106,7 +107,7 @@ public class Unknown implements Expression {
 	 * @return true if <code>constants</code> contains {@link #varName}
 	 */
 	@Override
-	public boolean hasConstantTerm(final Map<String, Double> constants) {
+	public final boolean hasConstantTerm(final Map<String, Double> constants) {
 		return constants.containsKey(varName);
 	}
 	
@@ -116,7 +117,7 @@ public class Unknown implements Expression {
 	 * @return true
 	 */
 	@Override
-	public boolean isSimple() {
+	public final boolean isSimple() {
 		return true;
 	}
 	
@@ -127,8 +128,24 @@ public class Unknown implements Expression {
 	 * @return this Unknown
 	 */
 	@Override
-	public Expression cleanDecimals(final Map<String, Double> constants) {
+	public final Expression cleanDecimals(final Map<String, Double> constants) {
 		return this;
+	}
+	
+	/**
+	 * If this Unknown is a known constant, returns an empty List; otherwise
+	 * returns a List with this as its only element.
+	 * 
+	 * @param constants known constants
+	 * @return empty List or a List with this
+	 */
+	@Override
+	public final List<Unknown> getUnknowns(final Map<String, Double> constants) {
+		if (constants.containsKey(varName)) {
+			return List.of();
+		} else {
+			return List.of(this);
+		}
 	}
 	
 	/**
