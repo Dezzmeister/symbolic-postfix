@@ -85,7 +85,7 @@ public final class Multiply implements Operation {
 	 * @return simplified version of <code>(fst * group)</code>
 	 */
 	@Override
-	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants) {
 		if (!fst.canEvaluate(constants)) {
 			return new SymbolicResult(fst, group, Operation.MULTIPLY);
 		}

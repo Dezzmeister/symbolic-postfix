@@ -31,7 +31,7 @@ public class Main {
 	}
 	
 	private static final void derivTest2() {
-		final String[] tokens = "1 2 x * /".split(" ");
+		final String[] tokens = "5 x * 7 +".split(" ");
 		//final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();
@@ -70,14 +70,14 @@ public class Main {
 		System.out.println("Function of pi: " + expression.isFunctionOf("pi"));
 		System.out.println();
 		
-		final Expression simplified = expression.simplify(Reserved.getCompleteConstantsMap(new HashMap<String, Double>()));
+		final Expression simplified = expression.simplify(Reserved.getCompleteConstantsMap(new HashMap<String, Expression>()));
 		final Expression derivative = simplified.derivative("r");
 		System.out.println("Simplified formula for the volume of a sphere: " + simplified);
 		System.out.println("Derivative of the simplified volume formula: " + derivative);
 		System.out.println("Function of r: " + simplified.isFunctionOf("r"));
 		
-		final Map<String, Double> radius = new HashMap<String, Double>();
-		radius.put("r", 2.0);
+		final Map<String, Expression> radius = new HashMap<String, Expression>();
+		radius.put("r", Value.TWO);
 		
 		System.out.println("Volume of a sphere with radius 2: " + simplified.evaluate(radius));
 	}

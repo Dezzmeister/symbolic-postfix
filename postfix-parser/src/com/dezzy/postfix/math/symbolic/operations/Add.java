@@ -58,7 +58,7 @@ public final class Add implements Operation {
 	 * @return simplified expression
 	 */
 	@Override
-	public final Expression simplify(final Expression op1, final Expression op2) {		
+	public final Expression simplify(final Expression op1, final Expression op2) {
 		if (op1.equals(op2)) {
 			return new SymbolicResult(new Value(2), op1, Operation.MULTIPLY);
 		} else {
@@ -91,7 +91,7 @@ public final class Add implements Operation {
 	 * @return simplified version of <code>fst + group</code>
 	 */
 	@Override
-	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants) {
 		//fst + group
 		
 		if (!fst.canEvaluate(constants)) {

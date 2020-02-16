@@ -90,7 +90,7 @@ public final class Divide implements Operation {
 	 * @return SymbolicResult with <code>(fst / group)</code>
 	 */
 	@Override
-	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants) {
 		return new SymbolicResult(fst, group, Operation.DIVIDE);
 	}
 	

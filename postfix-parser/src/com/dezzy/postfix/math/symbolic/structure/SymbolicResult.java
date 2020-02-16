@@ -51,7 +51,7 @@ public class SymbolicResult implements Expression {
 	 * @return double value of this calculation
 	 */
 	@Override
-	public final double evaluate(final Map<String, Double> constants) {
+	public final double evaluate(final Map<String, Expression> constants) {
 		final double d0 = operand1.evaluate(constants);
 		final double d1 = operand2.evaluate(constants);
 		
@@ -65,7 +65,7 @@ public class SymbolicResult implements Expression {
 	 * @return true if this symbolic result can be resolved given <code>constants</code>
 	 */
 	@Override
-	public boolean canEvaluate(final Map<String, Double> constants) {
+	public boolean canEvaluate(final Map<String, Expression> constants) {
 		return operand1.canEvaluate(constants) && operand2.canEvaluate(constants);
 	}
 	
@@ -79,14 +79,10 @@ public class SymbolicResult implements Expression {
 	 * @return a new {@link Value} or SymbolicResult
  */
 	@Override
-	public Expression simplify(final Map<String, Double> constants) {
+	public Expression simplify(final Map<String, Expression> constants) {
 		final Expression expr0 = operand1.simplify(constants);
 		final Expression expr1 = operand2.simplify(constants);
 		final Expression result = operation.simplify(expr0, expr1);
-		
-		if (result.canEvaluate(constants)) {
-			return new Value(result.evaluate(constants));
-		}
 		
 		if (result instanceof SymbolicResult) {
 			final SymbolicResult sResult = (SymbolicResult) result;
@@ -126,7 +122,7 @@ public class SymbolicResult implements Expression {
 	 * @return true if either of the operands has a constant term
 	 */
 	@Override
-	public boolean hasConstantTerm(final Map<String, Double> constants) {
+	public boolean hasConstantTerm(final Map<String, Expression> constants) {
 		return operand1.hasConstantTerm(constants) || operand2.hasConstantTerm(constants);
 	}
 	
@@ -147,7 +143,7 @@ public class SymbolicResult implements Expression {
 	 * @return a new SymbolicResult without decimal expressions
 	 */
 	@Override
-	public Expression cleanDecimals(final Map<String, Double> constants) {
+	public Expression cleanDecimals(final Map<String, Expression> constants) {
 		return new SymbolicResult(operand1.cleanDecimals(constants), operand2.cleanDecimals(constants), operation);
 	}
 	
@@ -158,7 +154,7 @@ public class SymbolicResult implements Expression {
 	 * @return a {@link List} of all unknowns
 	 */
 	@Override
-	public List<Unknown> getUnknowns(final Map<String, Double> constants) {
+	public List<Unknown> getUnknowns(final Map<String, Expression> constants) {
 		final List<Unknown> out = new ArrayList<Unknown>();
 		out.addAll(operand1.getUnknowns(constants));
 		out.addAll(operand2.getUnknowns(constants));

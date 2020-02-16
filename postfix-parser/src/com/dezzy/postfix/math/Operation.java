@@ -56,7 +56,7 @@ public interface Operation {
 	 * @param constants known constants
 	 * @return simplified version of this operation applied to <code>fst</code> and <code>group</code>
 	 */
-	public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants);
+	public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants);
 	
 	/**
 	 * Returns true if this operation is commutative (e.g., if the order of operands does not matter). <br>

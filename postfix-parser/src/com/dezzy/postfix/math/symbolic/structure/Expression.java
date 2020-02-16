@@ -17,7 +17,7 @@ public interface Expression {
 	 * @param constants maps known constants to values
 	 * @return the value of this expression
 	 */
-	public double evaluate(final Map<String, Double> constants);
+	public double evaluate(final Map<String, Expression> constants);
 	
 	/**
 	 * Returns true if this Expression can be evaluated given the known constants.
@@ -25,7 +25,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return true if the expression can be evaluated
 	 */
-	public boolean canEvaluate(final Map<String, Double> constants);
+	public boolean canEvaluate(final Map<String, Expression> constants);
 	
 	/**
 	 * Returns a new Expression that is a simplified copy of this one.
@@ -33,7 +33,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return simplified version of this Expression
 	 */
-	public Expression simplify(final Map<String, Double> constants);
+	public Expression simplify(final Map<String, Expression> constants);
 	
 	/**
 	 * Returns true if this Expression is a function of the specified variable.
@@ -57,7 +57,7 @@ public interface Expression {
 	 * @param known constants
 	 * @return true if this Expression has a constant
 	 */
-	public boolean hasConstantTerm(final Map<String, Double> constants);
+	public boolean hasConstantTerm(final Map<String, Expression> constants);
 	
 	/**
 	 * Returns true if this Expression is a simple mathematical unit (a constant or a variable).
@@ -73,7 +73,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return a new version of this Expression without decimals
 	 */
-	public Expression cleanDecimals(final Map<String, Double> constants);
+	public Expression cleanDecimals(final Map<String, Expression> constants);
 	
 	/**
 	 * Returns a list of all unknowns in this Expression, given the known constants. <br>
@@ -83,7 +83,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return list of all unknowns
 	 */
-	public List<Unknown> getUnknowns(final Map<String, Double> constants);
+	public List<Unknown> getUnknowns(final Map<String, Expression> constants);
 	
 	/**
 	 * Returns this expression in a readable form.

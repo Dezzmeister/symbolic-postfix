@@ -42,7 +42,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return value of this function applied to its argument
 	 */
 	@Override
-	public final double evaluate(final Map<String, Double> constants) {
+	public final double evaluate(final Map<String, Expression> constants) {
 		final double value = argument.evaluate(constants);
 		return function.apply(value);
 	}
@@ -54,7 +54,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return true if the argument can be evaluated
 	 */
 	@Override
-	public final boolean canEvaluate(final Map<String, Double> constants) {
+	public final boolean canEvaluate(final Map<String, Expression> constants) {
 		return argument.canEvaluate(constants);
 	}
 	
@@ -67,7 +67,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return a simplified version of this function, or a value
 	 */
 	@Override
-	public final Expression simplify(final Map<String, Double> constants) {
+	public final Expression simplify(final Map<String, Expression> constants) {
 		final Expression simplifiedArg = argument.simplify(constants);
 		
 		if (simplifiedArg.canEvaluate(constants)) {
@@ -108,7 +108,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return true if the argument to this function has a constant term
 	 */
 	@Override
-	public boolean hasConstantTerm(final Map<String, Double> constants) {
+	public boolean hasConstantTerm(final Map<String, Expression> constants) {
 		return argument.hasConstantTerm(constants);
 	}
 	
@@ -129,7 +129,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return a new SymbolicFunction where the argument contains no decimal expressions
 	 */
 	@Override
-	public Expression cleanDecimals(final Map<String, Double> constants) {
+	public Expression cleanDecimals(final Map<String, Expression> constants) {
 		return new SymbolicFunction(argument.cleanDecimals(constants), function);
 	}
 	
@@ -140,7 +140,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return unknowns in the argument
 	 */
 	@Override
-	public List<Unknown> getUnknowns(final Map<String, Double> constants) {
+	public List<Unknown> getUnknowns(final Map<String, Expression> constants) {
 		return argument.getUnknowns(constants);
 	}
 	

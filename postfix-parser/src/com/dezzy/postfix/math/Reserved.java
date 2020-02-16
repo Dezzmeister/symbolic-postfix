@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.dezzy.postfix.auxiliary.BiMap;
+import com.dezzy.postfix.math.symbolic.structure.Expression;
+import com.dezzy.postfix.math.symbolic.structure.Value;
 
 /**
  * Reserved/predetermined operators, functions, and constants.
@@ -26,7 +28,12 @@ public final class Reserved {
 	/**
 	 * Math constants
 	 */
-	public static final Map<String, Double> constants;
+	public static final Map<String, Expression> constants;
+	
+	/**
+	 * Empty constants map
+	 */
+	public static final Map<String, Expression> emptyConstants;
 	
 	/**
 	 * Mapping of mathematical constant names (internal representations) to their LaTeX representations
@@ -37,6 +44,7 @@ public final class Reserved {
 		operations = getOperations();
 		functions = getFunctions();
 		constants = getConstants();
+		emptyConstants = new HashMap<String, Expression>();
 		latexConstants = getLatexConstants();
 	}
 	
@@ -63,11 +71,11 @@ public final class Reserved {
 	 * 
 	 * @return mathematical constants
 	 */
-	private static final HashMap<String, Double> getConstants() {
-		final HashMap<String, Double> out = new HashMap<String, Double>();
+	private static final HashMap<String, Expression> getConstants() {
+		final HashMap<String, Expression> out = new HashMap<String, Expression>();
 		
-		out.put("e", Math.E);
-		out.put("pi", Math.PI);
+		out.put("e", Value.E);
+		out.put("pi", Value.PI);
 		
 		return out;
 	}
@@ -139,8 +147,8 @@ public final class Reserved {
 	 * 		may exist, if a formula for the volume of a sphere needs to be evaluated
 	 * @return a complete constants map
 	 */
-	public static final Map<String, Double> getCompleteConstantsMap(final Map<String, Double> additionalConstants) {
-		final Map<String, Double> allConstants = new HashMap<String, Double>();
+	public static final Map<String, Expression> getCompleteConstantsMap(final Map<String, Expression> additionalConstants) {
+		final Map<String, Expression> allConstants = new HashMap<String, Expression>();
 		allConstants.putAll(Reserved.constants);
 		allConstants.putAll(additionalConstants);
 		

@@ -48,6 +48,24 @@ public final class Value implements Expression {
 	public static final Value TWO = new Value(2);
 	
 	/**
+	 * Euler's number.
+	 * <p>
+	 * This constant is declared because it is used often; and the constant version of <i>e</i>
+	 * should be used instead of allocating a new Value. This constant is referenced in 
+	 * {@link com.dezzy.postfix.math.Reserved#constants Reserved.constants}.
+	 */
+	public static final Value E = new Value(Math.E);
+	
+	/**
+	 * Pi.
+	 * <p>
+	 * This constant is declared because it is used often; and the constant version of <i>pi</i>
+	 * should be used instead of allocating a new Value. This constant is referenced in 
+	 * {@link com.dezzy.postfix.math.Reserved#constants Reserved.constants}.
+	 */
+	public static final Value PI = new Value(Math.PI);
+	
+	/**
 	 * Used internally to check for equality, specifies the precision of the check.
 	 * Accounts for floating-point errors after calculations. <br>
 	 * Can be set with {@link #setAcceptedError(double)}
@@ -84,7 +102,7 @@ public final class Value implements Expression {
 	 * @return double value
 	 */
 	@Override
-	public final double evaluate(Map<String, Double> constants) {
+	public final double evaluate(Map<String, Expression> constants) {
 		return value;
 	}
 	
@@ -95,7 +113,7 @@ public final class Value implements Expression {
 	 * @return true
 	 */
 	@Override
-	public boolean canEvaluate(final Map<String, Double> constants) {
+	public boolean canEvaluate(final Map<String, Expression> constants) {
 		return true;
 	}
 	
@@ -106,7 +124,7 @@ public final class Value implements Expression {
 	 * @return this
 	 */
 	@Override
-	public Expression simplify(final Map<String, Double> constants) {
+	public Expression simplify(final Map<String, Expression> constants) {
 		return this;
 	}
 	
@@ -140,7 +158,7 @@ public final class Value implements Expression {
 	 * @return true
 	 */
 	@Override
-	public boolean hasConstantTerm(final Map<String, Double> constants) {
+	public boolean hasConstantTerm(final Map<String, Expression> constants) {
 		return true;
 	}
 	
@@ -169,9 +187,10 @@ public final class Value implements Expression {
 	 * @return a version of this Value with either an integer Value, a constant/variable name, or a fraction
 	 */
 	@Override
-	public final Expression cleanDecimals(final Map<String, Double> constants) {
-		for (final Entry<String, Double> entry : constants.entrySet()) {
-			if (equalsWithin(value, entry.getValue(), epsilon)) {
+	public final Expression cleanDecimals(final Map<String, Expression> constants) {
+		for (final Entry<String, Expression> entry : constants.entrySet()) {
+			final Expression entryValue = entry.getValue();
+			if (equals(entryValue)) {
 				return new Unknown(entry.getKey());
 			}
 		}
@@ -212,7 +231,7 @@ public final class Value implements Expression {
 	 * @return empty {@link List}
 	 */
 	@Override
-	public final List<Unknown> getUnknowns(final Map<String, Double> constants) {
+	public final List<Unknown> getUnknowns(final Map<String, Expression> constants) {
 		return List.of();
 	}
 	

@@ -1,10 +1,10 @@
 package com.dezzy.postfix.math.symbolic.operations;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.dezzy.postfix.math.Function;
 import com.dezzy.postfix.math.Operation;
+import com.dezzy.postfix.math.Reserved;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicFunction;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
@@ -60,11 +60,10 @@ public final class Power implements Operation {
 		} else if (op1.isFunctionOf(varName)) {
 			//Implements the power rule
 			
-			final Map<String, Double> nullMap = new HashMap<String, Double>();
-			if (op2.canEvaluate(nullMap)) {
-				if (op2.evaluate(nullMap) == 0) {
+			if (op2.canEvaluate(Reserved.emptyConstants)) {
+				if (op2.evaluate(Reserved.emptyConstants) == 0) {
 					return Value.ZERO;
-				} else if (op2.evaluate(nullMap) == 1) {
+				} else if (op2.evaluate(Reserved.emptyConstants) == 1) {
 					return op1.derivative(varName);
 				}
 			}
@@ -124,7 +123,7 @@ public final class Power implements Operation {
 	 * @return SymbolicResult with <code>(fst ^ group)</code>
 	 */
 	@Override
-	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants) {
+	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants) {
 		return new SymbolicResult(fst, group, Operation.POWER);
 	}
 	
