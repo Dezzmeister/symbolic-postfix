@@ -46,8 +46,34 @@ public interface Operation {
 	 */
 	public Expression simplify(final Expression op1, final Expression op2, final Map<String, Double> constants);
 	
+	/**
+	 * Tries to distribute the first expression among the second operation. If no simplification can be performed, returns
+	 * a {@link SymbolicExpression} with this operation, and <code>fst</code> and <code>group</code> as operands.
+	 * 
+	 * @param fst first operand
+	 * @param group second operand
+	 * @param constants known constants
+	 * @return simplified version of this operation applied to <code>fst</code> and <code>group</code>
+	 */
 	public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Double> constants);
 	
+	/**
+	 * Returns true if this operation is commutative (e.g., if the order of operands does not matter). <br>
+	 * The following operations are commutative:
+	 * <ul>
+	 * <li>Addition: <code>(a + b) == (b + a)</code></li>
+	 * <li>Multiplication: <code>(a * b) == (b * a)</code></li>
+	 * </ul>
+	 * 
+	 * The following operations are not commutative:
+	 * <ul>
+	 * <li>Subtraction: <code>(a - b) != (b - a)</code></li>
+	 * <li>Division: <code>(a / b) != (b / a)</code></li>
+	 * <li>Exponentiation: <code>(a ^ b) != (b ^ a)</code></li>
+	 * </ul>
+	 * 
+	 * @return true if this operation is commutative
+	 */
 	public boolean isCommutative();
 	
 	/**
