@@ -6,6 +6,7 @@ import java.util.Map;
 import com.dezzy.postfix.math.Operation;
 import com.dezzy.postfix.math.Reserved;
 import com.dezzy.postfix.math.symbolic.SymbolicParser;
+import com.dezzy.postfix.math.symbolic.constants.Constant;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
 import com.dezzy.postfix.math.symbolic.structure.Unknown;
@@ -70,14 +71,14 @@ public class Main {
 		System.out.println("Function of pi: " + expression.isFunctionOf("pi"));
 		System.out.println();
 		
-		final Expression simplified = expression.simplify(Reserved.getCompleteConstantsMap(new HashMap<String, Expression>()));
+		final Expression simplified = expression.simplify(Reserved.getCompleteConstantsMap(new HashMap<String, Constant>()));
 		final Expression derivative = simplified.derivative("r");
 		System.out.println("Simplified formula for the volume of a sphere: " + simplified);
 		System.out.println("Derivative of the simplified volume formula: " + derivative);
 		System.out.println("Function of r: " + simplified.isFunctionOf("r"));
 		
-		final Map<String, Expression> radius = new HashMap<String, Expression>();
-		radius.put("r", Value.TWO);
+		final Map<String, Constant> radius = new HashMap<String, Constant>();
+		radius.put("r", new Constant(Value.TWO));
 		
 		System.out.println("Volume of a sphere with radius 2: " + simplified.evaluate(radius));
 	}

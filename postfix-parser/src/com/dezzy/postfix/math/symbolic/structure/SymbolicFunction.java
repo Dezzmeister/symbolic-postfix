@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.dezzy.postfix.math.Function;
 import com.dezzy.postfix.math.Reserved;
+import com.dezzy.postfix.math.symbolic.constants.Constant;
 
 /**
  * A symbolic function with one argument.
@@ -42,7 +43,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return value of this function applied to its argument
 	 */
 	@Override
-	public final double evaluate(final Map<String, Expression> constants) {
+	public final double evaluate(final Map<String, Constant> constants) {
 		final double value = argument.evaluate(constants);
 		return function.apply(value);
 	}
@@ -54,7 +55,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return true if the argument can be evaluated
 	 */
 	@Override
-	public final boolean canEvaluate(final Map<String, Expression> constants) {
+	public final boolean canEvaluate(final Map<String, Constant> constants) {
 		return argument.canEvaluate(constants);
 	}
 	
@@ -67,7 +68,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return a simplified version of this function, or a value
 	 */
 	@Override
-	public final Expression simplify(final Map<String, Expression> constants) {
+	public final Expression simplify(final Map<String, Constant> constants) {
 		final Expression simplifiedArg = argument.simplify(constants);
 		
 		if (simplifiedArg.canEvaluate(constants)) {
@@ -108,7 +109,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return true if the argument to this function has a constant term
 	 */
 	@Override
-	public boolean hasConstantTerm(final Map<String, Expression> constants) {
+	public boolean hasConstantTerm(final Map<String, Constant> constants) {
 		return argument.hasConstantTerm(constants);
 	}
 	
@@ -129,7 +130,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return a new SymbolicFunction where the argument contains no decimal expressions
 	 */
 	@Override
-	public Expression cleanDecimals(final Map<String, Expression> constants) {
+	public Expression cleanDecimals(final Map<String, Constant> constants) {
 		return new SymbolicFunction(argument.cleanDecimals(constants), function);
 	}
 	
@@ -140,7 +141,7 @@ public final class SymbolicFunction implements Expression {
 	 * @return unknowns in the argument
 	 */
 	@Override
-	public List<Unknown> getUnknowns(final Map<String, Expression> constants) {
+	public List<Unknown> getUnknowns(final Map<String, Constant> constants) {
 		return argument.getUnknowns(constants);
 	}
 	

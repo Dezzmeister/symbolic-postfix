@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 
 import com.dezzy.postfix.math.Operation;
+import com.dezzy.postfix.math.symbolic.constants.Constant;
 
 /**
  * The simplest form of an expression; a known value. Instead of just using doubles, a separate class was created
@@ -102,7 +103,7 @@ public final class Value implements Expression {
 	 * @return double value
 	 */
 	@Override
-	public final double evaluate(Map<String, Expression> constants) {
+	public final double evaluate(Map<String, Constant> constants) {
 		return value;
 	}
 	
@@ -113,7 +114,7 @@ public final class Value implements Expression {
 	 * @return true
 	 */
 	@Override
-	public boolean canEvaluate(final Map<String, Expression> constants) {
+	public boolean canEvaluate(final Map<String, Constant> constants) {
 		return true;
 	}
 	
@@ -124,7 +125,7 @@ public final class Value implements Expression {
 	 * @return this
 	 */
 	@Override
-	public Expression simplify(final Map<String, Expression> constants) {
+	public Expression simplify(final Map<String, Constant> constants) {
 		return this;
 	}
 	
@@ -158,7 +159,7 @@ public final class Value implements Expression {
 	 * @return true
 	 */
 	@Override
-	public boolean hasConstantTerm(final Map<String, Expression> constants) {
+	public boolean hasConstantTerm(final Map<String, Constant> constants) {
 		return true;
 	}
 	
@@ -187,9 +188,9 @@ public final class Value implements Expression {
 	 * @return a version of this Value with either an integer Value, a constant/variable name, or a fraction
 	 */
 	@Override
-	public final Expression cleanDecimals(final Map<String, Expression> constants) {
-		for (final Entry<String, Expression> entry : constants.entrySet()) {
-			final Expression entryValue = entry.getValue();
+	public final Expression cleanDecimals(final Map<String, Constant> constants) {
+		for (final Entry<String, Constant> entry : constants.entrySet()) {
+			final Expression entryValue = entry.getValue().expression;
 			if (equals(entryValue)) {
 				return new Unknown(entry.getKey());
 			}
@@ -231,7 +232,7 @@ public final class Value implements Expression {
 	 * @return empty {@link List}
 	 */
 	@Override
-	public final List<Unknown> getUnknowns(final Map<String, Expression> constants) {
+	public final List<Unknown> getUnknowns(final Map<String, Constant> constants) {
 		return List.of();
 	}
 	

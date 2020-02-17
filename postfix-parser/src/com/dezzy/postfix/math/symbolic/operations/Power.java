@@ -5,6 +5,7 @@ import java.util.Map;
 import com.dezzy.postfix.math.Function;
 import com.dezzy.postfix.math.Operation;
 import com.dezzy.postfix.math.Reserved;
+import com.dezzy.postfix.math.symbolic.constants.Constant;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicFunction;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
@@ -98,10 +99,11 @@ public final class Power implements Operation {
 	 * 
 	 * @param op1 first operand (base)
 	 * @param op2 second operand (exponent)
+	 * @param constants known constants
 	 * @return simplified version of <code>(op1 ^ op2)</code>
 	 */
 	@Override
-	public final Expression simplify(final Expression op1, final Expression op2) {
+	public final Expression simplify(final Expression op1, final Expression op2, final Map<String, Constant> constants) {
 		if (op2.equals(Value.ZERO) || op1.equals(Value.ONE)) {
 			return Value.ONE;
 		} else if (op2.equals(Value.ONE)) {
@@ -123,7 +125,7 @@ public final class Power implements Operation {
 	 * @return SymbolicResult with <code>(fst ^ group)</code>
 	 */
 	@Override
-	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants) {
+	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Constant> constants) {
 		return new SymbolicResult(fst, group, Operation.POWER);
 	}
 	

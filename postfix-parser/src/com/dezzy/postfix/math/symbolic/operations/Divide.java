@@ -3,6 +3,7 @@ package com.dezzy.postfix.math.symbolic.operations;
 import java.util.Map;
 
 import com.dezzy.postfix.math.Operation;
+import com.dezzy.postfix.math.symbolic.constants.Constant;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
 import com.dezzy.postfix.math.symbolic.structure.Value;
@@ -67,10 +68,15 @@ public final class Divide implements Operation {
 	 * 
 	 * @param op1 first operand
 	 * @param op2 second operand
+	 * @param constants known constants
 	 * @return simplified version of <code>(op1 / op2)</code>
 	 */
 	@Override
-	public final Expression simplify(final Expression op1, final Expression op2) {
+	public final Expression simplify(final Expression op1, final Expression op2, final Map<String, Constant> constants) {
+		if (op1.canEvaluate(constants) && op2.canEvaluate(constants)) {
+			return new Value(operate(op1.evaluate(constants), op2.evaluate(constants)));
+		}
+		
 		if (op2.equals(Value.ONE)) {
 			return op1;
 		} else if (op1.equals(op2)) {
@@ -90,7 +96,7 @@ public final class Divide implements Operation {
 	 * @return SymbolicResult with <code>(fst / group)</code>
 	 */
 	@Override
-	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants) {
+	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Constant> constants) {
 		return new SymbolicResult(fst, group, Operation.DIVIDE);
 	}
 	

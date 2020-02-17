@@ -3,6 +3,8 @@ package com.dezzy.postfix.math.symbolic.structure;
 import java.util.List;
 import java.util.Map;
 
+import com.dezzy.postfix.math.symbolic.constants.Constant;
+
 /**
  * Identifies any mathematical expression, in symbolic form, that can ultimately be evaluated.
  * Implemented by {@link Value}, {@link Unknown}, {@link SymbolicResult}, and {@link SymbolicFunction}.
@@ -17,7 +19,7 @@ public interface Expression {
 	 * @param constants maps known constants to values
 	 * @return the value of this expression
 	 */
-	public double evaluate(final Map<String, Expression> constants);
+	public double evaluate(final Map<String, Constant> constants);
 	
 	/**
 	 * Returns true if this Expression can be evaluated given the known constants.
@@ -25,7 +27,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return true if the expression can be evaluated
 	 */
-	public boolean canEvaluate(final Map<String, Expression> constants);
+	public boolean canEvaluate(final Map<String, Constant> constants);
 	
 	/**
 	 * Returns a new Expression that is a simplified copy of this one.
@@ -33,7 +35,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return simplified version of this Expression
 	 */
-	public Expression simplify(final Map<String, Expression> constants);
+	public Expression simplify(final Map<String, Constant> constants);
 	
 	/**
 	 * Returns true if this Expression is a function of the specified variable.
@@ -57,7 +59,7 @@ public interface Expression {
 	 * @param known constants
 	 * @return true if this Expression has a constant
 	 */
-	public boolean hasConstantTerm(final Map<String, Expression> constants);
+	public boolean hasConstantTerm(final Map<String, Constant> constants);
 	
 	/**
 	 * Returns true if this Expression is a simple mathematical unit (a constant or a variable).
@@ -73,7 +75,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return a new version of this Expression without decimals
 	 */
-	public Expression cleanDecimals(final Map<String, Expression> constants);
+	public Expression cleanDecimals(final Map<String, Constant> constants);
 	
 	/**
 	 * Returns a list of all unknowns in this Expression, given the known constants. <br>
@@ -83,7 +85,7 @@ public interface Expression {
 	 * @param constants known constants
 	 * @return list of all unknowns
 	 */
-	public List<Unknown> getUnknowns(final Map<String, Expression> constants);
+	public List<Unknown> getUnknowns(final Map<String, Constant> constants);
 	
 	/**
 	 * Returns this expression in a readable form.

@@ -3,6 +3,7 @@ package com.dezzy.postfix.math.symbolic.operations;
 import java.util.Map;
 
 import com.dezzy.postfix.math.Operation;
+import com.dezzy.postfix.math.symbolic.constants.Constant;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
 import com.dezzy.postfix.math.symbolic.structure.Value;
@@ -58,10 +59,11 @@ public final class Multiply implements Operation {
 	 * 
 	 * @param op1 first operand
 	 * @param op2 second operand
+	 * @param constants known constants
 	 * @return simplified version of <code>(op1 - op2)</code>
 	 */
 	@Override
-	public final Expression simplify(final Expression op1, final Expression op2) {
+	public final Expression simplify(final Expression op1, final Expression op2, final Map<String, Constant> constants) {
 		if (op1.equals(Value.ZERO) || op2.equals(Value.ZERO)) {
 			return Value.ZERO;
 		} else if (op1.equals(Value.ONE)) {
@@ -85,7 +87,7 @@ public final class Multiply implements Operation {
 	 * @return simplified version of <code>(fst * group)</code>
 	 */
 	@Override
-	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants) {
+	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Constant> constants) {
 		if (!fst.canEvaluate(constants)) {
 			return new SymbolicResult(fst, group, Operation.MULTIPLY);
 		}

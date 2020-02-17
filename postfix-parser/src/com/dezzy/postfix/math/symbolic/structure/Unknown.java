@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.dezzy.postfix.math.symbolic.constants.Constant;
+
 /**
  * A mathematical unknown; typically a variable (<code>x,y,a,</code>etc.) or a known constant like <code>pi</code>
  * or <code>e</code>. Can only be evaluated when a mapping of known values is provided.
@@ -34,8 +36,8 @@ public final class Unknown implements Expression {
 	 * @throws IllegalArgumentException if no mapping exists 
 	 */
 	@Override
-	public final double evaluate(final Map<String, Expression> constants) {
-		final Expression expr = constants.get(varName);
+	public final double evaluate(final Map<String, Constant> constants) {
+		final Expression expr = constants.get(varName).expression;
 		
 		if (expr == null) {
 			throw new IllegalArgumentException("\"" + varName + "\" is unknown!");
@@ -51,7 +53,7 @@ public final class Unknown implements Expression {
 	 * @return true if this Unknown is defined in <code>constants</code>
 	 */
 	@Override
-	public final boolean canEvaluate(final Map<String, Expression> constants) {
+	public final boolean canEvaluate(final Map<String, Constant> constants) {
 		return constants.containsKey(varName);
 	}
 	
@@ -63,7 +65,7 @@ public final class Unknown implements Expression {
 	 * @return a simplified Value, or <code>this</code> if this cannot be simplified
 	 */
 	@Override
-	public final Expression simplify(final Map<String, Expression> constants) {
+	public final Expression simplify(final Map<String, Constant> constants) {
 		if (canEvaluate(constants)) {
 			return new Value(evaluate(constants));
 		} else {
@@ -107,7 +109,7 @@ public final class Unknown implements Expression {
 	 * @return true if <code>constants</code> contains {@link #varName}
 	 */
 	@Override
-	public final boolean hasConstantTerm(final Map<String, Expression> constants) {
+	public final boolean hasConstantTerm(final Map<String, Constant> constants) {
 		return constants.containsKey(varName);
 	}
 	
@@ -128,7 +130,7 @@ public final class Unknown implements Expression {
 	 * @return this Unknown
 	 */
 	@Override
-	public final Expression cleanDecimals(final Map<String, Expression> constants) {
+	public final Expression cleanDecimals(final Map<String, Constant> constants) {
 		return this;
 	}
 	
@@ -140,7 +142,7 @@ public final class Unknown implements Expression {
 	 * @return empty List or a List with this
 	 */
 	@Override
-	public final List<Unknown> getUnknowns(final Map<String, Expression> constants) {
+	public final List<Unknown> getUnknowns(final Map<String, Constant> constants) {
 		if (constants.containsKey(varName)) {
 			return List.of();
 		} else {

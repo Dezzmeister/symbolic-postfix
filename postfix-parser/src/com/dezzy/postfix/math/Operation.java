@@ -2,6 +2,7 @@ package com.dezzy.postfix.math;
 
 import java.util.Map;
 
+import com.dezzy.postfix.math.symbolic.constants.Constant;
 import com.dezzy.postfix.math.symbolic.operations.Add;
 import com.dezzy.postfix.math.symbolic.operations.Divide;
 import com.dezzy.postfix.math.symbolic.operations.Multiply;
@@ -43,9 +44,10 @@ public interface Operation {
 	 * 
 	 * @param op1 first operand
 	 * @param op2 second operand
+	 * @param constants known constants
 	 * @return simplified operation 
 	 */
-	public Expression simplify(final Expression op1, final Expression op2);
+	public Expression simplify(final Expression op1, final Expression op2, final Map<String, Constant> constants);
 	
 	/**
 	 * Tries to distribute the first expression among the second operation. If no simplification can be performed, returns
@@ -56,7 +58,7 @@ public interface Operation {
 	 * @param constants known constants
 	 * @return simplified version of this operation applied to <code>fst</code> and <code>group</code>
 	 */
-	public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Expression> constants);
+	public Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Constant> constants);
 	
 	/**
 	 * Returns true if this operation is commutative (e.g., if the order of operands does not matter). <br>
