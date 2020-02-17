@@ -32,7 +32,7 @@ public class Main {
 	}
 	
 	private static final void derivTest2() {
-		final String[] tokens = "5 x * 7 +".split(" ");
+		final String[] tokens = "i x 2 ^ *".split(" ");
 		//final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();

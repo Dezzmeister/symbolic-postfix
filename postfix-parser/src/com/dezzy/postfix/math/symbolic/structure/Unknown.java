@@ -54,7 +54,7 @@ public final class Unknown implements Expression {
 	 */
 	@Override
 	public final boolean canEvaluate(final Map<String, Constant> constants) {
-		return constants.containsKey(varName);
+		return constants.containsKey(varName) && constants.get(varName).reduce;
 	}
 	
 	/**

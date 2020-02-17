@@ -60,6 +60,10 @@ public class Subtract implements Operation {
 	 */
 	@Override
 	public final Expression simplify(final Expression op1, final Expression op2, final Map<String, Constant> constants) {
+		if (op1.canEvaluate(constants) && op2.canEvaluate(constants)) {
+			return new Value(operate(op1.evaluate(constants), op2.evaluate(constants)));
+		}
+		
 		if (op1.equals(op2)) {
 			return Value.ZERO;
 		} else {

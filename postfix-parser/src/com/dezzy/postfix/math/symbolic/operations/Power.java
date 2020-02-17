@@ -104,6 +104,10 @@ public final class Power implements Operation {
 	 */
 	@Override
 	public final Expression simplify(final Expression op1, final Expression op2, final Map<String, Constant> constants) {
+		if (op1.canEvaluate(constants) && op2.canEvaluate(constants)) {
+			return new Value(operate(op1.evaluate(constants), op2.evaluate(constants)));
+		}
+		
 		if (op2.equals(Value.ZERO) || op1.equals(Value.ONE)) {
 			return Value.ONE;
 		} else if (op2.equals(Value.ONE)) {

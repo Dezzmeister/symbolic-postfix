@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.dezzy.postfix.auxiliary.BiMap;
 import com.dezzy.postfix.math.symbolic.constants.Constant;
+import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
 import com.dezzy.postfix.math.symbolic.structure.Value;
 
 /**
@@ -76,6 +77,7 @@ public final class Reserved {
 		
 		out.put("e", new Constant(Value.E));
 		out.put("pi", new Constant(Value.PI));
+		out.put("i", new Constant(new SymbolicResult(Value.NEG_ONE, new Value(0.5), Operation.POWER), false));
 		
 		return out;
 	}
@@ -92,6 +94,7 @@ public final class Reserved {
 		
 		out.put("e", "e");
 		out.put("pi", "\\pi");
+		out.put("i", "i");
 		
 		return out;
 	}
