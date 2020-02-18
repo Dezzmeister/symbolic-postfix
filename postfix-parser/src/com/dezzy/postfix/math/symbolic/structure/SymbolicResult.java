@@ -111,6 +111,13 @@ public class SymbolicResult implements Expression {
 		return operand1.isFunctionOf(varName) || operand2.isFunctionOf(varName);
 	}
 	
+	/**
+	 * Returns the derivative of this SymbolicExpression by delegating to {@link Operation#derivative(Expression, Expression, String)}.
+	 * This SymbolicResult's operation implements the appropriate derivative rules.
+	 * 
+	 * @param varName variable to differentiate with respect to
+	 * @return the derivative of this SymbolicResult
+	 */
 	@Override
 	public Expression derivative(final String varName) {
 		return operation.derivative(operand1, operand2, varName);
@@ -161,6 +168,17 @@ public class SymbolicResult implements Expression {
 		out.addAll(operand2.getUnknowns(constants));
 		
 		return out;
+	}
+	
+	/**
+	 * Returns the leftmost term of this SymbolicResult's first operand. <br>
+	 * The first operand is the leftmost term of this SymbolicResult.
+	 * 
+	 * @return leftmost term of the first operand
+	 */
+	@Override
+	public final Expression leftmostTerm() {
+		return operand1.leftmostTerm();
 	}
 	
 	/**

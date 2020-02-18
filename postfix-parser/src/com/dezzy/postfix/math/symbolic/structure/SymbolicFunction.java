@@ -146,6 +146,16 @@ public final class SymbolicFunction implements Expression {
 	}
 	
 	/**
+	 * Returns this SymbolicFunction, because it's its own leftmost term.
+	 * 
+	 * @return this
+	 */
+	@Override
+	public Expression leftmostTerm() {
+		return this;
+	}
+	
+	/**
 	 * Returns a string of the format: <code>func(arg)</code><br>
 	 * sin(x): <code>sin(x)</code><br>
 	 * abs(x ^ 2): <code>abs((x ^ 2))</code><br>

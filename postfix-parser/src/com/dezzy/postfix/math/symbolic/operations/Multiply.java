@@ -232,7 +232,8 @@ public final class Multiply implements Operation {
 	public final String toLatex(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
 		final Expression first;
 		final Expression second;
-		final boolean useDot = !(op1.isSimple() || op2.isSimple());
+		
+		final boolean useDot = !(op1.isSimple() || op2.isSimple()) || (op2.leftmostTerm() instanceof Value);
 		
 		
 		if (op1.isSimple() && !op2.isSimple()) {

@@ -88,6 +88,13 @@ public interface Expression {
 	public List<Unknown> getUnknowns(final Map<String, Constant> constants);
 	
 	/**
+	 * Returns the leftmost term in this Expression tree.
+	 * 
+	 * @return the first term that would be visible if this Expression was printed out
+	 */
+	public Expression leftmostTerm();
+	
+	/**
 	 * Returns this expression in a readable form.
 	 * 
 	 * @return readable form of this expression

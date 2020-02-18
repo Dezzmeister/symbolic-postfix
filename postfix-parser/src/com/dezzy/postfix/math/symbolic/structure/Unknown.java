@@ -151,6 +151,16 @@ public final class Unknown implements Expression {
 	}
 	
 	/**
+	 * An Unknown has no other terms, so it's its own leftmost value.
+	 * 
+	 * @return this
+	 */
+	@Override
+	public final Expression leftmostTerm() {
+		return this;
+	}
+	
+	/**
 	 * Returns the symbolic name of this unknown. Does not know or care about the value.
 	 * 
 	 * @return the symbolic name of this unknown

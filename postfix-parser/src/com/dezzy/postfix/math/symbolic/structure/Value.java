@@ -237,6 +237,16 @@ public final class Value implements Expression {
 	}
 	
 	/**
+	 * A Value has no other terms, so it's its own leftmost value.
+	 * 
+	 * @return this
+	 */
+	@Override
+	public final Expression leftmostTerm() {
+		return this;
+	}
+	
+	/**
 	 * Returns this Value, converted to a String. For Values, the LaTeX representation
 	 * is equivalent to the plain String representation. If the value is close enough
 	 * (within {@link #epsilon}) to its rounded version, a String representation of the 
