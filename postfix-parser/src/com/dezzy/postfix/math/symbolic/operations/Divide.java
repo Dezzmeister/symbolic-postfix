@@ -16,6 +16,11 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
 public final class Divide implements Operation {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = 3066278704350756214L;
+
+	/**
 	 * Divides <code>d0</code> by <code>d1</code>.
 	 * 
 	 * @param d0 first operand

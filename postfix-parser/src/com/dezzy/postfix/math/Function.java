@@ -1,5 +1,6 @@
 package com.dezzy.postfix.math;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.dezzy.postfix.math.symbolic.structure.Expression;
@@ -12,7 +13,7 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
  * 
  * @author Joe Desmond
  */
-public interface Function {
+public interface Function extends Serializable {
 	
 	/**
 	 * Accepts the input and returns some output.
@@ -46,6 +47,11 @@ public interface Function {
 	 */
 	public static final Function sin = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = -136686037471901175L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.sin(x);
@@ -72,6 +78,11 @@ public interface Function {
 	 */
 	public static final Function cos = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = -8394158743094948851L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.cos(x);
@@ -99,6 +110,11 @@ public interface Function {
 	 */
 	public static final Function tan = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = -9132413305805912878L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.tan(x);
@@ -126,6 +142,11 @@ public interface Function {
 	 */
 	public static final Function invsin = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = -4728912356606760327L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.asin(x);
@@ -155,6 +176,11 @@ public interface Function {
 	 */
 	public static final Function invcos = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = 1084285129915576430L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.acos(x);
@@ -185,6 +211,11 @@ public interface Function {
 	 */
 	public static final Function invtan = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = 8593161297128873159L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.asin(x);
@@ -214,6 +245,11 @@ public interface Function {
 	 */
 	public static final Function sinh = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = 5411246488454456671L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.sinh(x);
@@ -241,6 +277,11 @@ public interface Function {
 	 */
 	public static final Function cosh = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = -6318428906749839838L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.cosh(x);
@@ -268,6 +309,11 @@ public interface Function {
 	 */
 	public static final Function tanh = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = -6846402605196670074L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.tanh(x);
@@ -297,6 +343,11 @@ public interface Function {
 	 */
 	public static final Function ln = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = 5824126052909892810L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.log(x);
@@ -323,6 +374,12 @@ public interface Function {
 	 * @see Math#log10(double)
 	 */
 	public static final Function log10 = new Function() {
+		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = 4365787479141047673L;
+		
 		private final Expression lnExpr = new SymbolicFunction(new Value(10), Function.ln);
 		
 		@Override
@@ -353,6 +410,11 @@ public interface Function {
 	 */
 	public static final Function abs = new Function() {
 		
+		/**
+		 * Serial Version UID
+		 */
+		private static final long serialVersionUID = 5468376718925710343L;
+
 		@Override
 		public double apply(final double x) {
 			return Math.abs(x);

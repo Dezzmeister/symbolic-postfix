@@ -1,5 +1,6 @@
 package com.dezzy.postfix.main;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
 @SuppressWarnings("unused")
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//valueTest();
 		//symbolTest();
 		//sphereTest();
@@ -31,12 +32,14 @@ public class Main {
 		System.out.println(simple);
 	}
 	
-	private static final void derivTest2() {
-		final String[] tokens = "i x 2 ^ *".split(" ");
+	private static final void derivTest2() throws IOException, ClassNotFoundException {
+		final String[] tokens = "2 x 3 ^ * 4 x 2 ^ * +".split(" ");
 		//final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();
-		final Expression deriv = expr.derivative("x");
+		expr.saveToFile("expressions/polynom1.expr");
+		final Expression expr2 = Expression.loadFromFile("expressions/polynom1.expr");
+		final Expression deriv = expr2.derivative("x");
 		final Expression simpleDeriv = deriv.simplify(Reserved.constants).cleanDecimals(Reserved.constants);
 		System.out.println(simpleDeriv);
 		System.out.println(simpleDeriv.toLatex(Reserved.latexConstants));

@@ -15,6 +15,11 @@ import com.dezzy.postfix.math.symbolic.constants.Constant;
 public final class Unknown implements Expression {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = 660867081208894847L;
+	
+	/**
 	 * String representation of this unknown
 	 */
 	public final String varName;

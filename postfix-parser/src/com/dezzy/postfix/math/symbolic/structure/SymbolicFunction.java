@@ -16,6 +16,11 @@ import com.dezzy.postfix.math.symbolic.constants.Constant;
 public final class SymbolicFunction implements Expression {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = 1081991115562000221L;
+
+	/**
 	 * Symbolic argument
 	 */
 	public final Expression argument;

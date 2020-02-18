@@ -1,5 +1,12 @@
 package com.dezzy.postfix.math.symbolic.structure;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +18,7 @@ import com.dezzy.postfix.math.symbolic.constants.Constant;
  * 
  * @author Joe Desmond
  */
-public interface Expression {
+public interface Expression extends Serializable {
 	
 	/**
 	 * Evaluates this mathematical expression.
@@ -127,4 +134,40 @@ public interface Expression {
 	 * @return hashcode of this expression
 	 */
 	public int hashCode();
+	
+	/**
+	 * Serializes this Expression and saves it to a file. Expressions can be loaded with {@link #loadFromFile(String)}.
+	 * 
+	 * @param path path to the file
+	 * @throws IOException if there is a problem writing to the file
+	 */
+	public default void saveToFile(final String path) throws IOException {
+		final FileOutputStream fos = new FileOutputStream(new File(path));
+		final ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(this);
+		
+		oos.close();
+		fos.close();
+	}
+	
+	/**
+	 * Loads a serialized Expression from a file. Expressions can be saved with {@link #saveToFile(String)}.
+	 * 
+	 * @param path path to the file
+	 * @return Expression located at <code>path</code>
+	 * @throws IOException if there is problem reading the file
+	 * @throws ClassNotFoundException if there is a problem reading the object
+	 */
+	public static Expression loadFromFile(final String path) throws IOException, ClassNotFoundException {
+		final FileInputStream fis = new FileInputStream(new File(path));
+		final ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		final Expression object = (Expression) ois.readObject();
+		
+		ois.close();
+		fis.close();
+		
+		return object;
+	}
 }

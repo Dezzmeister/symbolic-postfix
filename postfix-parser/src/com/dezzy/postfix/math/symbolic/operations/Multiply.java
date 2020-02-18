@@ -16,6 +16,11 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
 public final class Multiply implements Operation {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = 8263024803364889338L;
+
+	/**
 	 * Multiplies <code>d0</code> and <code>d1</code>.
 	 * 
 	 * @param d0 first operand

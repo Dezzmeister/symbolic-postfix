@@ -17,6 +17,11 @@ import com.dezzy.postfix.math.symbolic.constants.Constant;
 public final class Value implements Expression {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = 6094892383842370942L;
+
+	/**
 	 * 0.
 	 * <p>
 	 * This constant is declared because it is used often; and the constant version of 0

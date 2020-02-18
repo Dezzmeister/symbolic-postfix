@@ -1,5 +1,6 @@
 package com.dezzy.postfix.math;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.dezzy.postfix.math.symbolic.constants.Constant;
@@ -16,7 +17,7 @@ import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
  * 
  * @author Joe Desmond
  */
-public interface Operation {
+public interface Operation extends Serializable {
 	
 	/**
 	 * Performs an operation on two doubles and returns a double.
@@ -88,7 +89,7 @@ public interface Operation {
 	 * @param latexMappings user-specified LaTeX representations of named constants and variables
 	 * @return LaTeX representation of this operation
 	 */
-	default public String toLatex(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
+	public default String toLatex(final Expression op1, final Expression op2, final Map<String, String> latexMappings) {
 		return "\\left(" + op1.toLatex(latexMappings) + " " + identifier() + " " + op2.toLatex(latexMappings) + "\\right)";
 	}
 	

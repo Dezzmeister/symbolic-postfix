@@ -16,6 +16,11 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
 public class Subtract implements Operation {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = 591621198556028496L;
+
+	/**
 	 * Subtracts <code>d1</code> from <code>d0</code>.
 	 * 
 	 * @param d0 first operand

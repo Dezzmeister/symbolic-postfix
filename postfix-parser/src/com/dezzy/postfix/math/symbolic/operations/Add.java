@@ -16,6 +16,11 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
 public final class Add implements Operation {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = -996657934313300759L;
+
+	/**
 	 * Adds two doubles.
 	 * 
 	 * @param d0 first addend

@@ -19,6 +19,11 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
 public final class Power implements Operation {
 	
 	/**
+	 * Serial Version UID
+	 */
+	private static final long serialVersionUID = 8798278345280531177L;
+
+	/**
 	 * Raises <code>d0</code> to the power of <code>d1</code>.
 	 * 
 	 * @param d0 first operand (base)
