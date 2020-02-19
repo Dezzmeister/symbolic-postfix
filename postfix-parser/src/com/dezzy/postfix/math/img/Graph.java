@@ -34,10 +34,24 @@ public final class Graph {
 		final int height = out.getHeight();
 		final Graphics2D g2 = out.createGraphics();
 		
+		final double pixPerWinX = format.pixelDim.width / format.windowWidth;
+		final double pixPerWinY = format.pixelDim.height / format.windowHeight;
+		
+		final double gridXSpacing = format.gridSpacing * pixPerWinX;
+		final double gridYSpacing = format.gridSpacing * pixPerWinY;
+		
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, width, height);
 		
 		g2.setColor(Color.BLACK);
+		
+		for (int y = 0; y < height; y += gridYSpacing) {
+			g2.drawLine(0, y, width, y);
+		}
+		
+		for (int x = 0; x < width; x += gridXSpacing) {
+			g2.drawLine(x, 0, x, height);
+		}
 		
 		return out;
 	}

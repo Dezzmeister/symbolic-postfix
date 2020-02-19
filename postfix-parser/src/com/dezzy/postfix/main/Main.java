@@ -37,6 +37,7 @@ public class Main {
 		//final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();
+		System.out.println("Saving:\t" + expr);
 		expr.saveToFile("expressions/polynom1.expr");
 		final Expression expr2 = Expression.loadFromFile("expressions/polynom1.expr");
 		final Expression deriv = expr2.derivative("x");
