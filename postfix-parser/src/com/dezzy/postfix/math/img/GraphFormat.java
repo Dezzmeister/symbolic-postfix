@@ -45,7 +45,7 @@ public final class GraphFormat implements Serializable {
 	/**
 	 * Interval between each gridline
 	 */
-	public final int gridSpacing;
+	public final double gridSpacing;
 	
 	/**
 	 * Creates a graph format with the given properties.
@@ -57,7 +57,7 @@ public final class GraphFormat implements Serializable {
 	 * @param _windowStartY y coordinate at which window begins (function space)
 	 * @param _gridSpacing interval between each gridline, in window coordinates
 	 */
-	public GraphFormat(final Dimension _pixelDim, final double _windowWidth, final double _windowHeight, final double _windowStartX, final double _windowStartY, final int _gridSpacing) {
+	public GraphFormat(final Dimension _pixelDim, final double _windowWidth, final double _windowHeight, final double _windowStartX, final double _windowStartY, final double _gridSpacing) {
 		pixelDim = _pixelDim;
 		windowWidth = _windowWidth;
 		windowHeight = _windowHeight;

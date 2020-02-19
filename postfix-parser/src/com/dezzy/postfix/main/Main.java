@@ -1,11 +1,17 @@
 package com.dezzy.postfix.main;
 
+import java.awt.Dimension;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
 import com.dezzy.postfix.math.Operation;
 import com.dezzy.postfix.math.Reserved;
+import com.dezzy.postfix.math.img.Graph;
+import com.dezzy.postfix.math.img.GraphFormat;
 import com.dezzy.postfix.math.symbolic.SymbolicParser;
 import com.dezzy.postfix.math.symbolic.constants.Constant;
 import com.dezzy.postfix.math.symbolic.structure.Expression;
@@ -44,6 +50,10 @@ public class Main {
 		final Expression simpleDeriv = deriv.simplify(Reserved.constants).cleanDecimals(Reserved.constants);
 		System.out.println(simpleDeriv);
 		System.out.println(simpleDeriv.toLatex(Reserved.latexConstants));
+		
+		final GraphFormat format = new GraphFormat(new Dimension(200, 400), 2.0, 3.0, -2.0, 0.0, 0.25);
+		final Graph graph = new Graph(expr, "x", Reserved.emptyConstants, format);
+		ImageIO.write(graph.image, "png", new File("graphs/test2.png"));
 	}
 	
 	private static final void derivativeTest() {
