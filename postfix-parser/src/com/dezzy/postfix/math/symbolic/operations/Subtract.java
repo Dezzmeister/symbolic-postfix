@@ -87,44 +87,62 @@ public class Subtract implements Operation {
 	 */
 	@Override
 	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Constant> constants) {
-		if (!fst.canEvaluate(constants)) {
-			return new SymbolicResult(fst, group, Operation.SUBTRACT);
-		}
 		
 		final Expression op1 = group.operand1;
 		final Expression op2 = group.operand2;
 		
 		if (group.operation == Operation.ADD) {
-			if (op1.canEvaluate(constants)) {
-				final Expression simple = new Value(fst.evaluate(constants) - op1.evaluate(constants));
-				
-				if (op2.canEvaluate(constants)) {
-					return new Value(simple.evaluate(constants) - op2.evaluate(constants));
+			if (fst.canEvaluate(constants)) {
+				if (op1.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) - op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						return new Value(simple.evaluate(constants) - op2.evaluate(constants));
+					} else {
+						return new SymbolicResult(simple, op2, Operation.SUBTRACT);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) - op2.evaluate(constants));
+					
+					return new SymbolicResult(simple, op1, Operation.SUBTRACT);
 				} else {
-					return new SymbolicResult(simple, op2, Operation.SUBTRACT);
+					return new SymbolicResult(fst, group, Operation.SUBTRACT);
 				}
-			} else if (op2.canEvaluate(constants)) {
-				final Expression simple = new Value(fst.evaluate(constants) - op2.evaluate(constants));
-				
-				return new SymbolicResult(simple, op1, Operation.SUBTRACT);
 			} else {
-				return new SymbolicResult(fst, group, Operation.SUBTRACT);
+				if (fst.equals(op1)) {
+					return new SymbolicResult(Value.NEG_ONE, op2, Operation.MULTIPLY);
+				} else if (fst.equals(op2)) {
+					return new SymbolicResult(Value.NEG_ONE, op1, Operation.MULTIPLY);
+				} else {
+					return new SymbolicResult(fst, group, Operation.SUBTRACT);
+				}
 			}
 		} else if (group.operation == Operation.SUBTRACT) {
-			if (op1.canEvaluate(constants)) {
-				final Expression simple = new Value(fst.evaluate(constants) - op1.evaluate(constants));
+			if (fst.canEvaluate(constants)) {
+				if (op1.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) - op1.evaluate(constants));
+					
+					if (op2.canEvaluate(constants)) {
+						return new Value(simple.evaluate(constants) + op2.evaluate(constants));
+					} else {
+						return new SymbolicResult(simple, op2, Operation.ADD);
+					}
+				} else if (op2.canEvaluate(constants)) {
+					final Expression simple = new Value(fst.evaluate(constants) + op2.evaluate(constants));
 				
-				if (op2.canEvaluate(constants)) {
-					return new Value(simple.evaluate(constants) + op2.evaluate(constants));
+					return new SymbolicResult(simple, op1, Operation.SUBTRACT);
 				} else {
-					return new SymbolicResult(simple, op2, Operation.ADD);
+					return new SymbolicResult(fst, group, Operation.SUBTRACT);
 				}
-			} else if (op2.canEvaluate(constants)) {
-				final Expression simple = new Value(fst.evaluate(constants) + op2.evaluate(constants));
-				
-				return new SymbolicResult(simple, op1, Operation.SUBTRACT);
 			} else {
-				return new SymbolicResult(fst, group, Operation.SUBTRACT);
+				if (fst.equals(op1)) {
+					return op2;
+				} else if (fst.equals(op2)) {
+					final Expression multTerm = new SymbolicResult(Value.TWO, fst, Operation.MULTIPLY).simplify(constants);
+					return new SymbolicResult(multTerm, op2, Operation.SUBTRACT);
+				} else {
+					return new SymbolicResult(fst, group, Operation.SUBTRACT);
+				}
 			}
 		} else {
 			return new SymbolicResult(fst, group, Operation.SUBTRACT);

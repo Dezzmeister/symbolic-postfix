@@ -102,6 +102,12 @@ public final class Divide implements Operation {
 	 */
 	@Override
 	public final Expression distribute(final Expression fst, final SymbolicResult group, final Map<String, Constant> constants) {
+		
+		if (group.operation == Operation.DIVIDE) {
+			final Expression newNumerator = new SymbolicResult(fst, group.operand2, Operation.MULTIPLY).simplify(constants);
+			return new SymbolicResult(newNumerator, group.operand1, Operation.DIVIDE);
+		}
+		
 		return new SymbolicResult(fst, group, Operation.DIVIDE);
 	}
 	

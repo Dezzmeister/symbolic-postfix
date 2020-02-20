@@ -23,12 +23,18 @@ import com.dezzy.postfix.math.symbolic.structure.Value;
 public class Main {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		//valueTest();
-		//symbolTest();
-		//sphereTest();
-		//derivativeTest();
-		derivTest2();
-		//distributionTest();
+		//derivTest2();
+		physHW4();
+	}
+	
+	private static final void physHW4() throws IOException {
+		final String[] tokens = "y L + y / ln".split(" ");
+		final SymbolicParser parser = new SymbolicParser(tokens);
+		final Expression expr = parser.createSymbolicStructure();
+		final Expression deriv = expr.derivative("y").simplify(Reserved.constants).cleanDecimals(Reserved.constants);
+		expr.saveToFile("expressions/hw4-p12-b.expr");
+		deriv.saveToFile("expressions/hw4-p12-b-deriv.expr");
+		System.out.println(deriv.toLatex(Reserved.latexConstants));
 	}
 	
 	private static final void distributionTest() {
@@ -39,7 +45,7 @@ public class Main {
 	}
 	
 	private static final void derivTest2() throws IOException, ClassNotFoundException {
-		final String[] tokens = "2 x 3 ^ * 4 x 2 ^ * +".split(" ");
+		final String[] tokens = "2 x 3 ^ * 4 x 2 ^ * + x sin +".split(" ");
 		//final String[] tokens = "x 2 ^ 3 *".split(" ");
 		final SymbolicParser parser = new SymbolicParser(tokens);
 		final Expression expr = parser.createSymbolicStructure();
