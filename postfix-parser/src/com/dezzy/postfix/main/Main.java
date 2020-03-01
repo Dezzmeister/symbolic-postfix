@@ -18,13 +18,36 @@ import com.dezzy.postfix.math.symbolic.structure.Expression;
 import com.dezzy.postfix.math.symbolic.structure.SymbolicResult;
 import com.dezzy.postfix.math.symbolic.structure.Unknown;
 import com.dezzy.postfix.math.symbolic.structure.Value;
+import com.dezzy.postfix.test.TestUtility;
 
 @SuppressWarnings("unused")
 public class Main {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
 		//derivTest2();
-		physHW4();
+		//physHW4();
+		//fractions();
+		derivTest3();
+	}
+	
+	private static void derivTest3() {
+		final String[] tokens = "3 x 2 ^ * 5 x * + x sin +".split(" ");
+		final String[] derivTokens = "6 x * 5 + x cos +".split(" ");
+		final Expression expr = new SymbolicParser(tokens).createSymbolicStructure().simplify(Reserved.constants).cleanDecimals(Reserved.constants);
+		final Expression expected = new SymbolicParser(derivTokens).createSymbolicStructure().simplify(Reserved.constants).cleanDecimals(Reserved.constants);
+		final Expression actual = expr.derivative("x").simplify(Reserved.constants).cleanDecimals(Reserved.constants);
+		System.out.println("Expression:\t" + expr);
+		System.out.println("Expected deriv:\t" + expected);
+		System.out.println("Actual deriv:\t" + actual);
+		System.out.println("Equal:\t" + expected.analyticallyEquals(actual, TestUtility.TEST_X_DOMAIN));
+	}
+	
+	private static void fractions() {
+		final String[] tokens = "6 8 / 2 10 / /".split(" ");
+		final SymbolicParser parser = new SymbolicParser(tokens);
+		final Expression expr = parser.createSymbolicStructure().simplify(Reserved.constants).cleanDecimals(Reserved.constants);
+		System.out.println(expr);
+		System.out.println(expr.evaluate(Reserved.constants));
 	}
 	
 	private static final void physHW4() throws IOException {

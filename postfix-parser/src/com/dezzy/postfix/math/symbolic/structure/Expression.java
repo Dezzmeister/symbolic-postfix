@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -134,6 +135,35 @@ public interface Expression extends Serializable {
 	 * @return hashcode of this expression
 	 */
 	public int hashCode();
+	
+	/**
+	 * Returns true if this Expression is equal to another Expression evaluated over the given domain.
+	 * 
+	 * @param other Expression to check equality with
+	 * @param constants set of known constants
+	 * @param domain set of inputs to test
+	 * @return true if this Expression is equal to another for the given domain
+	 */
+	public default boolean analyticallyEquals(final Expression other, final Map<String, Constant> constants, final Map<String, double[]> domain) {
+		final Map<String, Constant> copied = new HashMap<String, Constant>();
+		copied.putAll(constants);
+		
+		for (int i = 0; i < domain.size(); i++) {
+			final int index = i;
+			domain.forEach((s, d) -> copied.put(s, new Constant(new Value(d[index]))));
+			
+			if (canEvaluate(copied) && other.canEvaluate(copied)) {
+				final Value v0 = new Value(evaluate(copied));
+				final Value v1 = new Value(other.evaluate(copied));
+				
+				if (!v0.equals(v1)) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
 	
 	/**
 	 * Serializes this Expression and saves it to a file. Expressions can be loaded with {@link #loadFromFile(String)}.
