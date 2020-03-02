@@ -16,7 +16,7 @@ import com.dezzy.postfix.math.evaluation.VariableDomain;
 import com.dezzy.postfix.math.symbolic.constants.Constant;
 
 /**
- * Identifies any mathematical expression, in symbolic form, that can ultimately be evaluated.
+ * Identifies any mathematical expression in symbolic form. Expression can be simplified and evaluated given a set of known constants.
  * Implemented by {@link Value}, {@link Unknown}, {@link SymbolicResult}, and {@link SymbolicFunction}.
  * 
  * @author Joe Desmond
