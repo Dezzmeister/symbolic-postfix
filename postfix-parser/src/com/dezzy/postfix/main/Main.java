@@ -24,22 +24,9 @@ import com.dezzy.postfix.test.TestUtility;
 public class Main {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		//derivTest2();
-		//physHW4();
-		//fractions();
-		derivTest3();
-	}
-	
-	private static void derivTest3() {
-		final String[] tokens = "3 x 2 ^ * 5 x * + x sin +".split(" ");
-		final String[] derivTokens = "6 x * 5 + x cos +".split(" ");
-		final Expression expr = new SymbolicParser(tokens).createSymbolicStructure().simplify(Reserved.constants).cleanDecimals(Reserved.constants);
-		final Expression expected = new SymbolicParser(derivTokens).createSymbolicStructure().simplify(Reserved.constants).cleanDecimals(Reserved.constants);
-		final Expression actual = expr.derivative("x").simplify(Reserved.constants).cleanDecimals(Reserved.constants);
-		System.out.println("Expression:\t" + expr);
-		System.out.println("Expected deriv:\t" + expected);
-		System.out.println("Actual deriv:\t" + actual);
-		System.out.println("Equal:\t" + expected.analyticallyEquals(actual, TestUtility.TEST_X_DOMAIN));
+		TestUtility.derivativeTest();
+		System.out.println("========================================================");
+		TestUtility.sphereTest();
 	}
 	
 	private static void fractions() {
@@ -96,33 +83,5 @@ public class Main {
 		System.out.println(derivative.simplify(Reserved.constants));
 		System.out.println(derivative.simplify(Reserved.constants).toLatex(Reserved.latexConstants));
 		System.out.println(derivative.derivative("x").simplify(Reserved.constants));
-	}
-	
-	private static final void sphereTest() {
-		final String[] tokens = "4 3 / pi * r 3 ^ *".split(" ");
-		//final String[] tokens = "2 0.5 9 * -1.25 / - 0.008 + 2 ^ 5 3 / ^".split(" ");
-		
-		final SymbolicParser parser = new SymbolicParser(tokens);
-		
-		final Expression expression = parser.createSymbolicStructure();
-		final Expression derivative1 = expression.derivative("r");
-		System.out.println("Formula for the volume of a sphere: " + expression);
-		System.out.println("Derivative of the volume formula: " + derivative1);
-		
-		System.out.println("Function of r: " + expression.isFunctionOf("r"));
-		System.out.println("Function of x: " + expression.isFunctionOf("x"));
-		System.out.println("Function of pi: " + expression.isFunctionOf("pi"));
-		System.out.println();
-		
-		final Expression simplified = expression.simplify(Reserved.getCompleteConstantsMap(new HashMap<String, Constant>()));
-		final Expression derivative = simplified.derivative("r");
-		System.out.println("Simplified formula for the volume of a sphere: " + simplified);
-		System.out.println("Derivative of the simplified volume formula: " + derivative);
-		System.out.println("Function of r: " + simplified.isFunctionOf("r"));
-		
-		final Map<String, Constant> radius = new HashMap<String, Constant>();
-		radius.put("r", new Constant(Value.TWO));
-		
-		System.out.println("Volume of a sphere with radius 2: " + simplified.evaluate(radius));
 	}
 }
