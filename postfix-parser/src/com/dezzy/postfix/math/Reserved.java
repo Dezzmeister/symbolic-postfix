@@ -27,7 +27,7 @@ public final class Reserved {
 	public static final BiMap<String, Function> functions;
 	
 	/**
-	 * Math constants
+	 * Math constants. Contains mappings for pi, euler's number, and i (sqrt(-1)).
 	 */
 	public static final Map<String, Constant> constants;
 	

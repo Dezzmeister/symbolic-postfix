@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dezzy.postfix.math.evaluation.EvaluationDomain;
+import com.dezzy.postfix.math.evaluation.VariableDomain;
 import com.dezzy.postfix.math.symbolic.constants.Constant;
 
 /**
@@ -140,29 +142,42 @@ public interface Expression extends Serializable {
 	 * Returns true if this Expression is equal to another Expression evaluated over the given domain.
 	 * 
 	 * @param other Expression to check equality with
-	 * @param constants set of known constants
-	 * @param domain set of inputs to test
+	 * @param evalDomain evaluation domain to test equality over
 	 * @return true if this Expression is equal to another for the given domain
 	 */
-	public default boolean analyticallyEquals(final Expression other, final Map<String, Constant> constants, final Map<String, double[]> domain) {
-		final Map<String, Constant> copied = new HashMap<String, Constant>();
-		copied.putAll(constants);
+	public default boolean analyticallyEquals(final Expression other, final EvaluationDomain evalDomain) {
+		final VariableDomain[] domains = evalDomain.variableDomains;
 		
-		for (int i = 0; i < domain.size(); i++) {
-			final int index = i;
-			domain.forEach((s, d) -> copied.put(s, new Constant(new Value(d[index]))));
+		if (domains != null && domains.length != 0) {
+			final Map<String, Constant> constants = new HashMap<String, Constant>();
+			constants.putAll(evalDomain.constants);
 			
-			if (canEvaluate(copied) && other.canEvaluate(copied)) {
-				final Value v0 = new Value(evaluate(copied));
-				final Value v1 = new Value(other.evaluate(copied));
+			//The number of discrete points in the domain
+			final int domainSize = domains[0].values.length;
+			
+			for (int i = 1; i < evalDomain.variableDomains.length; i++) {
+				if (domainSize != evalDomain.variableDomains[i].values.length) {
+					throw new IllegalArgumentException("Variable domains are not the same length!");
+				}
+			}
+			
+			for (int i = 0; i < domainSize; i++) {
+				for (int j = 0; j < domains.length; j++) {
+					constants.put(domains[j].varName, new Constant(new Value(domains[j].values[i])));
+				}
 				
-				if (!v0.equals(v1)) {
+				final Expression expr0 = simplify(constants);
+				final Expression expr1 = other.simplify(constants);
+				
+				if (!expr0.equals(expr1)) {
 					return false;
 				}
 			}
+			
+			return true;			
+		} else {
+			return simplify(evalDomain.constants).equals(other.simplify(evalDomain.constants));
 		}
-		
-		return true;
 	}
 	
 	/**

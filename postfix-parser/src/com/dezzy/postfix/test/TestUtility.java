@@ -1,29 +1,41 @@
 package com.dezzy.postfix.test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.dezzy.postfix.math.Reserved;
-import com.dezzy.postfix.math.symbolic.constants.Constant;
-import com.dezzy.postfix.math.symbolic.structure.Value;
+import com.dezzy.postfix.math.evaluation.EvaluationDomain;
+import com.dezzy.postfix.math.evaluation.VariableDomain;
 
-public class TestUtility {
-	/**
-	 * Huge waste of memory
-	 */
-	public static final List<Map<String, Constant>> TEST_X_DOMAIN;
+/**
+ * Various testing utilities.
+ *
+ * @author Joe Desmond
+ */
+public final class TestUtility {
 	
-	static {
-		TEST_X_DOMAIN = new ArrayList<Map<String, Constant>>();
+	/**
+	 * Range of values in {@link #TEST_X_DOMAIN}
+	 */
+	public static final double TEST_X_DOMAIN_RANGE = 20;
+	
+	/**
+	 * Offset of values in {@link #TEST_X_DOMAIN}
+	 */
+	public static final double TEST_X_DOMAIN_OFFSET = -10;
+	
+	/**
+	 * An evaluation domain for testing functions of x, with known constants {@link Reserved#constants}
+	 */
+	public static final EvaluationDomain TEST_X_DOMAIN;
+	
+	static {		
+		final double[] domain = new double[1000];
 		
-		for (double d = -2.0; d < 2.0; d += 0.01) {
-			final Map<String, Constant> val = new HashMap<String, Constant>();
-			val.put("x", new Constant(new Value(d)));
-			final Map<String, Constant> constants = Reserved.getCompleteConstantsMap(val);
-			TEST_X_DOMAIN.add(constants);
+		for (int i = 0; i < domain.length; i++) {
+			double value = ((i / (double) domain.length) * TEST_X_DOMAIN_RANGE) + TEST_X_DOMAIN_OFFSET;
+			domain[i] = value;
 		}
+		
+		final VariableDomain[] xDomain = {new VariableDomain("x", domain)};
+		TEST_X_DOMAIN = new EvaluationDomain(Reserved.constants, xDomain);
 	}
 	
 	
