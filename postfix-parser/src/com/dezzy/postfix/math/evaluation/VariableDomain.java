@@ -19,6 +19,12 @@ public final class VariableDomain {
 	 */
 	public final double[] values;
 	
+	/**
+	 * Creates a domain in which a variable takes on the specified values.
+	 * 
+	 * @param _varName variable name
+	 * @param _values domain of <code>_varName</code>
+	 */
 	public VariableDomain(final String _varName, final double[] _values) {
 		varName = _varName;
 		values = _values;
